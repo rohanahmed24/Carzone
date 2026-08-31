@@ -1,6 +1,6 @@
 import {lstat, readdir, readFile} from 'node:fs/promises';
 import path from 'node:path';
-import {fileURLToPath, pathToFileURL} from 'node:url';
+import {pathToFileURL} from 'node:url';
 
 export const expectedRoutes = [
   'index.html', 'latest-cars.html', 'popular-cars.html', 'upcoming-cars.html',
@@ -9,8 +9,18 @@ export const expectedRoutes = [
   'sell-your-car.html', 'write-review.html', 'style-guide.html'
 ];
 
-const allowedExtensions = new Set(['.html', '.css', '.mjs', '.js', '.map', '.json', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.woff', '.woff2', '.ttf', '.otf', '.ico', '.webmanifest', '.txt']);
-const blockedDirectories = new Set(['.git', 'docs', 'node_modules', 'src']);
+const blockedDirectories = new Set(['.git', 'docs', 'node_modules', 'src', 'source']);
+const iconNames = new Set(['heart','plus','minus','x','menu','arrow-right','arrow-left','sliders-horizontal','check','chevron-down']);
+const licensePaths = new Set(['assets/fonts/manrope-LICENSE','assets/fonts/barlow-condensed-LICENSE','assets/icons/lucide-LICENSE']);
+function approvedArtifactPath(relative) {
+  return expectedRoutes.includes(relative) ||
+    relative === 'assets/brand/carzone-logo.png' || licensePaths.has(relative) ||
+    /^assets\/media\/[a-z0-9-]+\.webp$/.test(relative) ||
+    /^assets\/fonts\/(?:manrope-latin-(?:400|500|600|700)|barlow-condensed-latin-(?:600|700))-normal\.woff2$/.test(relative) ||
+    (/^assets\/icons\/[^/]+\.svg$/.test(relative) && iconNames.has(path.basename(relative,'.svg'))) ||
+    /^assets\/(?:browser|domain|ui)\/[a-z0-9-]+\.mjs$/.test(relative) ||
+    /^assets\/styles\/[a-z0-9-]+\.css$/.test(relative);
+}
 const forbidden = [/webflow\.js/i, /jquery/i, /WebFont\.load/, /formdata\.webflow/i, /href=["']#["']/i, /style=["'][^"']*opacity:\s*0/i];
 const externalLinkAllowlist = new Set();
 
@@ -41,13 +51,26 @@ function resolveLocal(root, fromFile, value) {
   if (!bare) return {filename: fromFile};
   let decoded;
   try { decoded = decodeURIComponent(bare); } catch { return {error: 'invalid URL encoding'}; }
-  const base = pathToFileURL(fromFile);
+  // URL root means artifact root, never the host drive root. Check traversal
+  // before URL normalization removes dot segments (including encoded dots).
+  if (/[\\:%?#\0]/.test(decoded)) return {error: 'invalid local URL encoding'};
+  if (decoded.startsWith('//')) return {error: 'not a local URL'};
+  const fromRelative = path.relative(root,fromFile).replaceAll('\\','/');
+  const segments = decoded.startsWith('/') ? [] : fromRelative.split('/').slice(0,-1);
+  for (const segment of decoded.split('/')) {
+    if (!segment || segment === '.') continue;
+    if (segment === '..') {
+      if (!segments.length) return {error: 'escapes artifact'};
+      segments.pop();
+    } else segments.push(segment);
+  }
+  const origin = 'https://carzone-artifact.invalid';
   let url;
-  try { url = new URL(decoded, base); } catch { return {error: 'invalid local URL'}; }
-  if (url.protocol !== 'file:') return {error: 'not a local URL'};
-  const filename = path.resolve(fileURLToPath(url));
+  try { url = new URL(decoded, `${origin}/${fromRelative}`); } catch { return {error: 'invalid local URL'}; }
+  if (url.origin !== origin) return {error: 'not a local URL'};
+  const filename = path.resolve(root,...decodeURIComponent(url.pathname).split('/').filter(Boolean));
   const relative = path.relative(root, filename);
-  if (relative.startsWith('..') || path.isAbsolute(relative)) return {error: 'escapes artifact'};
+  if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) return {error: 'escapes artifact'};
   return {filename};
 }
 
@@ -96,10 +119,30 @@ async function checkReference({root, fromFile, source, value, type, issues, cssF
   }
 }
 
-async function inspectCss(root, filename, issues, cssFiles, moduleFiles) {
+function hasAccessibleConditionRadios(htmlPages, css) {
+  const groups = htmlPages.flatMap(html => [...html.matchAll(/<div\b[^>]*class=["']condition-control["'][^>]*>([\s\S]*?)<\/div>/gi)].map(match => match[1]));
+  if (!groups.length) return false;
+  for (const group of groups) {
+    const inputs = [...group.matchAll(/<input\b[^>]*>/gi)];
+    const labels = [...group.matchAll(/<label\b[^>]*>\s*<input\b(?=[^>]*\btype=["']radio["'])[^>]*>\s*<span>\s*[^<\s][^<]*<\/span>\s*<\/label>/gi)];
+    if (!inputs.length || inputs.length !== labels.length) return false;
+  }
+  const proxy = css.match(/\.condition-control\s+span\s*\{([^}]+)\}/)?.[1] ?? '';
+  const focus = css.match(/\.condition-control\s+input:focus-visible\s*\+\s*span\s*\{([^}]+)\}/)?.[1] ?? '';
+  return /display\s*:\s*(?:flex|inline-flex|block)\b/.test(proxy) &&
+    /outline\s*:\s*[1-9][\d.]*px\s+solid\s+/.test(focus) &&
+    !/(?:visibility\s*:\s*hidden|display\s*:\s*none|opacity\s*:\s*0\b)/.test(proxy + focus);
+}
+
+async function inspectCss(root, filename, issues, cssFiles, moduleFiles, htmlPages) {
   const css = await readFile(filename, 'utf8');
   const source = path.relative(root, filename).replaceAll('\\', '/');
-  if (/opacity\s*:\s*0(?:\s*[;}])/i.test(css)) issues.push(`${source}: initial zero-opacity style is not allowed`);
+  const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g,'');
+  for (const rule of withoutComments.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (!/(?:^|;)\s*opacity\s*:\s*(?:0(?:\.0*)?|\.0+)(?:\s*!important)?\s*(?:;|$)/i.test(rule[2])) continue;
+    const isNativeRadioProxy = rule[1].trim() === '.condition-control input' && hasAccessibleConditionRadios(htmlPages,withoutComments);
+    if (!isNativeRadioProxy) issues.push(`${source}: initial zero-opacity style is not allowed (${rule[1].trim()})`);
+  }
   const urls = [];
   for (const match of css.matchAll(/url\(\s*(["']?)(.*?)\1\s*\)/gi)) urls.push(match[2]);
   for (const match of css.matchAll(/@import\s+(?:url\(\s*)?(["'])(.*?)\1/gi)) urls.push(match[2]);
@@ -124,8 +167,7 @@ export async function checkArtifact(root) {
     const parts = file.relative.split('/');
     if (file.symlink) issues.push(`${file.relative}: symbolic links are not allowed`);
     if (parts.some(part => blockedDirectories.has(part))) issues.push(`${file.relative}: forbidden source directory`);
-    const isLicense = /(?:^|[-_.])licen[cs]e(?:$|[-_.])/i.test(path.basename(file.filename));
-    if (!file.symlink && !isLicense && !allowedExtensions.has(path.extname(file.filename).toLowerCase())) issues.push(`${file.relative}: unapproved artifact file type`);
+    if (!file.symlink && !approvedArtifactPath(file.relative)) issues.push(`${file.relative}: unapproved artifact path or file type`);
   }
   const rootHtml = files.filter(file => !file.symlink && path.dirname(file.relative) === '.' && file.relative.endsWith('.html')).map(file => file.relative);
   for (const route of expectedRoutes) if (!rootHtml.includes(route)) issues.push(`missing expected route ${route}`);
@@ -133,10 +175,12 @@ export async function checkArtifact(root) {
 
   const titles = new Map(), descriptions = new Map();
   const cssFiles = new Set(), moduleFiles = new Set();
+  const htmlPages = [];
   for (const route of expectedRoutes) {
     const filename = path.join(absoluteRoot, route);
     if (!await exists(filename)) continue;
     const html = await readFile(filename, 'utf8');
+    htmlPages.push(html);
     for (const pattern of forbidden) if (pattern.test(html)) issues.push(`${route}: forbidden legacy/placeholder pattern ${pattern}`);
     if (!/^\s*<!doctype\s+html>/i.test(html)) issues.push(`${route}: missing HTML doctype`);
     if (!/<html\b[^>]*\blang\s*=\s*["']en(?:-[^"']+)?["']/i.test(html)) issues.push(`${route}: expected lang=en`);
@@ -152,7 +196,7 @@ export async function checkArtifact(root) {
       for (const value of values) await checkReference({root: absoluteRoot, fromFile: filename, source: route, value, type: attribute.name, issues, cssFiles, moduleFiles});
     }
   }
-  for (const filename of cssFiles) await inspectCss(absoluteRoot, filename, issues, cssFiles, moduleFiles);
+  for (const filename of cssFiles) await inspectCss(absoluteRoot, filename, issues, cssFiles, moduleFiles, htmlPages);
   for (const filename of moduleFiles) await inspectModule(absoluteRoot, filename, issues, cssFiles, moduleFiles);
   return issues;
 }
