@@ -1,0 +1,19 @@
+{
+  "created": "2026-08-31",
+  "source": "../carzone-refined-direction.png",
+  "method": "Built-in ImageGen with the approved consolidated image attached as visual reference",
+  "authority": "Approved written specification and original consolidated visual; generated references extend them without changing catalogue truth or accessibility requirements.",
+  "fidelity": "Native dimensions measured from saved PNGs. These are readable composition/state references, not exact CSS-pixel exports. Do not stretch them or reproduce generated factual mistakes.",
+  "references": [
+    {"file":"home-desktop.png","width":1374,"height":1145,"logicalWidth":1440,"state":"Empty saved/compare; Used finder; preview price ascending","notes":"Keep original open-row container treatment. Additional Family SUV preview comes from approved plan. Hero maintains red sedan and dark studio."},
+    {"file":"home-mobile.png","width":837,"height":1880,"logicalWidth":390,"state":"Copy-first stacked hero, full-width finder, stacked vehicle summary","notes":"Chosen second generation replaces first two-column mobile attempt. Real controls retain 44px targets and 16px text even if the raster compresses them."},
+    {"file":"inventory-desktop.png","width":1435,"height":1096,"logicalWidth":1440,"state":"All cars, Used, Sedan, price ascending; two matching sample cars","notes":"Counts always derived from catalogue. Keep open divider rows."},
+    {"file":"inventory-mobile.png","width":825,"height":1906,"logicalWidth":390,"state":"Filter drawer open with draft Used/Sedan values","notes":"Raster incorrectly invents 102 cars behind the overlay: never implement that count. Actual selected fixture state has 2 matching vehicles. Draft must not change committed results before Apply."},
+    {"file":"vehicle-desktop.png","width":1435,"height":1096,"logicalWidth":1440,"state":"City sedan used detail","notes":"Generated extra engine/drivetrain/interior values are not catalogue facts and must be omitted or Not provided. Original image backgrounds are retained. Availability is plain meaningful text, not a decorative badge."},
+    {"file":"vehicle-mobile.png","width":864,"height":1821,"logicalWidth":390,"state":"City sedan used detail, image above facts/actions","notes":"Overview/specification/price/review remain links. Reuse original photo. Upcoming variant has no enquiry and uses unknown-price/unconfirmed-launch copy."},
+    {"file":"compare-desktop.png","width":1435,"height":1096,"logicalWidth":1440,"state":"City sedan, Sport sedan, Family SUV; all rows","notes":"Use shared catalogue facts and generated green SUV production image. Remove/undo and Add are real controls."},
+    {"file":"compare-mobile.png","width":849,"height":1852,"logicalWidth":390,"state":"Three selections, table scrolled to first vehicle, remaining columns horizontally reachable","notes":"Raster duplicates City values into Sport and shows a grey SUV thumbnail: actual Sport is145kW/28000km and actual SUV is green. Omit contradictory add-another helper at 3 selections. Keep visible all-three selection list, labeled menu, table-scroller affordance and 44px remove targets."},
+    {"file":"forms-desktop.png","width":1435,"height":1096,"logicalWidth":1440,"state":"Enquiry input/review/error state reference sheet","notes":"Reference labels distinguish states; implementation shows one active step at a time, not all examples at once. Enquiry is a dialog on existing detail routes, not a new route."},
+    {"file":"forms-mobile.png","width":849,"height":1852,"logicalWidth":390,"state":"Local enquiry review step with fictional sample values","notes":"Completion is shown only when finishing. Keep exact unsent-copy; no contact/free text in URL or storage. Seller, review and educational valuation extend this form family."}
+  ]
+}
