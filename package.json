@@ -1,0 +1,20 @@
+{
+  "name": "carzone-modernized",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=24 <25"},
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/dev.mjs",
+    "preview": "node scripts/server.mjs",
+    "check": "npm test && npm run build && node scripts/check-artifact.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/barlow-condensed": "5.3.0",
+    "@fontsource/manrope": "5.3.0",
+    "lucide-static": "1.38.0",
+    "sharp": "0.35.4"
+  }
+}
