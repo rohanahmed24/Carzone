@@ -4,6 +4,7 @@ import {mkdtemp, mkdir, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {checkArtifact} from '../scripts/check-artifact.mjs';
+import {build} from '../scripts/build.mjs';
 
 const routes = [
   'index.html', 'latest-cars.html', 'popular-cars.html', 'upcoming-cars.html',
@@ -11,6 +12,13 @@ const routes = [
   'car-price.html', 'car-review.html', 'car-valuation.html', 'compare-car.html',
   'sell-your-car.html', 'write-review.html', 'style-guide.html'
 ];
+
+test('complete build is self-contained and preserves all fourteen routes', async t => {
+  const root = await mkdtemp(path.join(tmpdir(),'carzone-artifact-build-'));
+  t.after(() => rm(root,{recursive:true,force:true}));
+  await build(root);
+  assert.deepEqual(await checkArtifact(root),[]);
+});
 
 const page = (name, extra = '') => `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width">
