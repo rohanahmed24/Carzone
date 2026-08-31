@@ -93,6 +93,28 @@ test('unknown shared IDs are omitted with a visible parsing notice', () => {
   assert.equal(f.writes.length,0);
 });
 
+test('removal focuses the nearest next or previous surviving car, then the add selector', () => {
+  for (const [removedId, expected] of [['city-sedan','sport-sedan'],['sport-sedan','family-suv'],['family-suv','sport-sedan']]) {
+    const f = fixture('?cars=city-sedan,sport-sedan,family-suv');
+    let focused;
+    f.doc.activeElement = {dataset:{removeCompare:removedId},isConnected:false};
+    f.root.querySelector = selector => {
+      const id = selector.match(/data-remove-compare="([^"]+)"/)?.[1];
+      if (id && f.store.snapshot().compare.includes(id)) return {focus(){focused=id;}};
+      if (selector === '[data-remove-compare]') return {focus(){focused=f.store.snapshot().compare[0];}};
+      return null;
+    };
+    f.click({removeCompare:removedId});
+    assert.equal(focused,expected);
+  }
+  const f = fixture('?cars=city-sedan');
+  let focused = false;
+  f.doc.activeElement = {dataset:{removeCompare:'city-sedan'},isConnected:false};
+  f.root.querySelector = selector => selector === '[data-compare-select]' ? {focus(){focused=true;}} : null;
+  f.click({removeCompare:'city-sedan'});
+  assert.equal(focused,true);
+});
+
 test('saved controller keeps unlimited saves separate, opening read-only, and restores removed order', () => {
   const doc = new EventTarget();
   const dialog = new EventTarget();

@@ -6,6 +6,38 @@ import {escapeHtml} from '../src/ui/escape.mjs';
 import {formatPrice,formatKm} from '../src/ui/format.mjs';
 import {mountDialog} from '../src/browser/dialog.mjs';
 import {mountHome} from '../src/browser/home.mjs';
+import {renderPages} from '../src/pages/registry.mjs';
+import {mountMotion} from '../src/browser/motion.mjs';
+
+test('final registry has exactly fourteen distinct, fully described routes and real style examples', () => {
+  const pages = renderPages();
+  assert.deepEqual([...pages.keys()].sort(), ['index.html','latest-cars.html','popular-cars.html','upcoming-cars.html','car-details.html','used-car-details.html','car-specification.html','car-price.html','car-review.html','compare-car.html','sell-your-car.html','write-review.html','car-valuation.html','style-guide.html'].sort());
+  assert.equal(new Set([...pages.values()].map(page => page.title)).size,14);
+  assert.equal(new Set([...pages.values()].map(page => page.description)).size,14);
+  for (const page of pages.values()) {
+    assert.ok(page.title.trim() && page.description.trim());
+    assert.equal((page.body.match(/<h1[ >]/g) || []).length,1);
+  }
+  const guide = pages.get('style-guide.html').body;
+  for (const pattern of [/<button[^>]*disabled/, /<input/, /vehicle-row/, /form-privacy/, /compare-empty/, /aria-invalid="true"/, /comparison-table/, /#d81416/, /#111214/, /#ffffff/, /Manrope/, /Barlow Condensed/]) assert.match(guide,pattern);
+  assert.doesNotMatch(guide,/data-save=|data-compare=|data-remove-compare=|data-compare-add|href="#"/);
+  for (const control of guide.matchAll(/<(?:button|input|select)\b[^>]*>/g)) assert.match(control[0],/\sdisabled(?:\s|>)/);
+  assert.match(renderShell(pages.get('index.html')),/href="car-valuation.html"/);
+  assert.match(renderShell(pages.get('index.html')),/href="style-guide.html"/);
+});
+
+test('hero motion is optional and respects reduced motion', () => {
+  let animated = 0;
+  const doc = {defaultView:{matchMedia:()=>({matches:true})},querySelector:()=>({animate(){animated++;}})};
+  mountMotion(doc);
+  assert.equal(animated,0);
+  doc.defaultView.matchMedia = () => ({matches:false});
+  mountMotion(doc);
+  assert.equal(animated,1);
+  doc.defaultView.matchMedia = undefined;
+  assert.doesNotThrow(() => mountMotion(doc));
+  assert.equal(animated,1);
+});
 test('home has real content, local assets and a disabled no-JS finder', () => {
   const html = renderShell(renderHome());
   assert.match(html,/Find your next great drive\./);

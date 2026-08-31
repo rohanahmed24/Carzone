@@ -20,14 +20,16 @@ export function mountCompare(doc, store) {
       if (savedStatus) savedStatus.textContent = text;
     }
   };
-  const render = (restoreFocus = false, active = doc.activeElement) => {
+  const render = (restoreFocus = false, active = doc.activeElement, priorIndex = -1) => {
     const priorId = active?.dataset?.removeCompare;
     setComparisonView(doc,current);
     root.innerHTML = compareContent(current,differencesOnly);
     syncSelection(doc,store.snapshot());
     if (restoreFocus && !active?.isConnected) {
       const surviving = priorId && root.querySelector(`[data-remove-compare="${priorId}"]`);
-      (surviving || root.querySelector('[data-remove-compare]') || root.querySelector('[data-compare-select]'))?.focus();
+      const neighborId = current[Math.min(Math.max(priorIndex,0),current.length - 1)];
+      const neighbor = neighborId && root.querySelector(`[data-remove-compare="${neighborId}"]`);
+      (surviving || neighbor || root.querySelector('[data-compare-select]'))?.focus();
     }
   };
   const read = () => {
@@ -41,11 +43,12 @@ export function mountCompare(doc, store) {
   };
   const edit = ids => {
     const active = doc.activeElement;
+    const priorIndex = current.indexOf(active?.dataset?.removeCompare);
     current = ids;
     setComparisonView(doc,current);
     store.replaceCompare(current);
     win.history.pushState(null,'',`compare-car.html?${comparisonQuery(current)}`);
-    render(true,active);
+    render(true,active,priorIndex);
   };
   const add = id => {
     if (!validIds.has(id) || current.includes(id)) return;
