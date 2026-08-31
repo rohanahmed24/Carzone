@@ -68,7 +68,7 @@ function externalIssue(source, value, type) {
 }
 
 async function checkReference({root, fromFile, source, value, type, issues, cssFiles, moduleFiles}) {
-  if (!value || value.startsWith('#')) return;
+  if (!value) return;
   if (isExternal(value)) {
     if (type === 'href' && externalLinkAllowlist.has(value)) return;
     issues.push(externalIssue(source, value, type));

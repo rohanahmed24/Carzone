@@ -37,14 +37,22 @@ test('controlled complete fixture is self-contained and preserves all fourteen r
 
 test('reports missing route, unresolved asset, dangling fragment, and placeholder href', async t => {
   const root = await fixture(t, {
-    'index.html': page('index.html', '<a href="missing.html">Missing</a><a href="car-details.html#not-here">Broken</a><a href="#">Placeholder</a>')
+    'index.html': page('index.html', '<a href="missing.html">Missing</a><a href="car-details.html#not-here">Broken</a><a href="#not-here">Same page</a><a href="#">Placeholder</a>')
   });
   await rm(path.join(root, 'style-guide.html'));
   const issues = await checkArtifact(root);
   assert.match(issues.join('\n'), /missing expected route style-guide\.html/);
   assert.match(issues.join('\n'), /missing\.html/);
-  assert.match(issues.join('\n'), /not-here/);
+  assert.equal(issues.filter(issue => issue.includes('dangling fragment') && issue.includes('not-here')).length, 2);
   assert.match(issues.join('\n'), /href=\["'\]#\["'\]/);
+});
+
+test('reports route content that is too short to be meaningful', async t => {
+  const root = await fixture(t, {
+    'index.html': '<!doctype html><html lang="en"><head><meta name="description" content="Description for index"><meta http-equiv="Content-Security-Policy" content="default-src \'self\'"><title>Carzone index</title></head><body><h1>Home</h1>Hi</body></html>'
+  });
+  const issues = await checkArtifact(root);
+  assert.match(issues.join('\n'), /index\.html: route content is not meaningful/);
 });
 
 test('reports remote form action, copied legacy runtime, and unexpected root HTML page', async t => {
