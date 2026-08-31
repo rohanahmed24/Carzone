@@ -8,7 +8,7 @@ export function renderShell(page) {
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
 <title>${e(page.title)} | Carzone</title><meta name="description" content="${e(page.description)}">
 <link rel="preload" href="/assets/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-${['tokens','base','shell','home'].map(name=>`<link rel="stylesheet" href="/assets/styles/${name}.css">`).join('\n')}
+${['tokens','base','shell','home',...({inventory:['inventory'],vehicle:['vehicle']}[page.controller] ?? [])].map(name=>`<link rel="stylesheet" href="/assets/styles/${name}.css">`).join('\n')}
 <script type="module" src="/assets/browser/main.mjs"></script></head>
 <body data-controller="${e(page.controller)}"><a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="container header-inner">${brand()}<nav class="desktop-nav" aria-label="Main navigation">${navLinks()}<button type="button" class="saved-toggle" data-open-saved disabled><span class="icon icon-heart" aria-hidden="true"></span>Saved cars (<span data-saved-count>0</span>)</button></nav><button type="button" class="menu-toggle" data-open-menu disabled hidden aria-haspopup="dialog"><span class="icon icon-menu" aria-hidden="true"></span>Menu</button></div></header>

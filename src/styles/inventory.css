@@ -1,0 +1,124 @@
+.inventory {
+  padding-top: 40px;
+}
+.inventory-intro p {
+  color: var(--muted);
+  margin: 16px 0 24px;
+}
+.inventory-tabs {
+  display: flex;
+  gap: 40px;
+  border-bottom: 1px solid var(--line);
+}
+.inventory-tabs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+.inventory-tabs a[aria-current] {
+  color: var(--red);
+  border-bottom-color: var(--red);
+}
+[data-desktop-fields] {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  border: 0;
+  margin: 0;
+  padding: 24px 0 16px;
+}
+.inventory-select {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--muted);
+}
+.inventory-select select {
+  width: 100%;
+  min-width: 0;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+.inventory-result-summary {
+  padding: 12px 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+.inventory-result-summary p {
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.filter-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.filter-chips .clear-filters {
+  color: var(--red);
+  border-color: transparent;
+}
+.inventory-empty {
+  padding-block: 64px;
+}
+.inventory-empty p {
+  margin-top: 16px;
+}
+.mobile-filter-toggle {
+  display: none;
+}
+#inventory-filters {
+  width: min(100% - 40px, 520px);
+}
+[data-mobile-fields] {
+  border: 0;
+  margin: 0;
+  padding: 12px 0;
+  display: grid;
+  gap: 20px;
+}
+.filter-draft-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+@media (max-width: 700px) {
+  .inventory {
+    padding-top: 28px;
+  }
+  .inventory-tabs {
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .inventory-enhanced [data-desktop-filters] {
+    display: none;
+  }
+  [data-desktop-fields] {
+    grid-template-columns: 1fr;
+  }
+  .inventory-enhanced .mobile-filter-toggle {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+  }
+  #inventory-filters {
+    width: 100%;
+    max-width: 100%;
+    max-height: 90dvh;
+    margin: auto 0 0;
+    padding: 24px 20px;
+    border-radius: 16px 16px 0 0;
+  }
+  .inventory-empty {
+    padding-block: 40px;
+  }
+}

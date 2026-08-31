@@ -2,6 +2,8 @@ import {vehicles} from '../domain/catalogue.mjs';
 import {createStore} from '../domain/store.mjs';
 import {mountDialog} from './dialog.mjs';
 import {mountHome} from './home.mjs';
+import {mountInventory} from './inventory.mjs';
+import {mountVehicle} from './vehicle.mjs';
 import {mountMotion} from './motion.mjs';
 
 // This entry point is browser-only. Pure tests import individual controllers.
@@ -20,6 +22,6 @@ if(menuButton && menu && typeof menu.showModal==='function') {
   doc.body.classList.add('menu-enhanced');
 }
 // Shared selection controls stay disabled until their selection controller is mounted.
-const controllers={home:mountHome};
+const controllers={home:mountHome,inventory:mountInventory,vehicle:mountVehicle};
 controllers[doc.body.dataset.controller]?.(doc,store);
 mountMotion(doc);
