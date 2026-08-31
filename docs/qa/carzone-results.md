@@ -8,12 +8,13 @@ Date: 2026-08-31 (Asia/Dhaka). Target: local generated application only; no depl
 - Installed locked packages: @fontsource/barlow-condensed 5.3.0, @fontsource/manrope 5.3.0, lucide-static 1.38.0, sharp 0.35.4.
 - Browser: Codex in-app browser through the selected browser runtime. No alternate browser automation has been used.
 - Preview target: `http://127.0.0.1:4176/`, serving `dist/` only.
+- At wrap-up, the earlier server process session was unavailable and no listener was present on4176. No live preview tab/server is claimed. The README's local run commands remain the startup instructions; no browser access was retried.
 
 ## Final automated evidence
 
 Application Tasks1–11 have scoped independent spec/quality approval. The real-build integration test is committed as `da693eb`; its independent scoped review approved spec compliance and quality with no findings. That initial final gate passed73/73. Whole-branch review then identified two selection-controller issues and one artifact-checker weakness, all handled in one bounded fix wave.
 
-The latest canonical `npm run check` after that fix wave completed with exit0: **78 tests passed, 0 failed**, then `Carzone built to dist.` and `Artifact verification passed.` Focused final tests passed27/27. The earlier RED run failed four of26 focused tests as expected, reproducing missing persistence visibility/binding, toggle-removal Undo and shell-only main content. Final scoped re-review is pending. Individual RED/GREEN reports remain in the implementation ledger.
+The latest canonical `npm run check` after source fix commit `3d77a35` completed with exit0: **78 tests passed, 0 failed**, then `Carzone built to dist.` and `Artifact verification passed.` Focused final tests passed27/27. The earlier RED run failed four of26 focused tests as expected, reproducing missing persistence visibility/binding, toggle-removal Undo and shell-only main content. Independent scoped re-review over `fabc6ed..89b1f9c` marked all three findings addressed, with no new breakage or out-of-scope observations. Individual RED/GREEN reports remain in the implementation ledger.
 
 The artifact tests ran the real `build(root)` and `checkArtifact(root)` in a fresh temporary directory: initial RED8/9 (only the then-missing style-guide route), then GREEN9/9. The later content regression also rejects routes whose meaningful text exists only in the shared shell; route-specific main content excludes the heading. The fixed route list independently checks all fourteen paths rather than trusting the renderer registry. Metadata, local assets/imports/fragments, CSP, approved output paths and legacy/placeholder checks passed. This establishes the automated gate, not whole-site browser acceptance.
 
@@ -81,4 +82,4 @@ Automated build/test/artifact gate: passed. Whole-site Product Design/browser ac
 - Important: an active Saved row/detail toggle removed without Undo. Saved removals now use the same order-preserving undo operation, with page-level Undo when the drawer is closed and drawer-local Undo when open.
 - Minor: meaningful-content checking counted title/navigation/footer. The checker now requires route-specific main text beyond the heading and has a shell-preserving negative regression.
 
-Source fixes and automated gate complete; independent scoped re-review pending. No browser claim is attached to these changes. The dedicated warning and page-level Undo need rendered placement/keyboard verification once legitimately permitted browser access is available.
+Source fixes and automated gate complete; independent scoped re-review approved all three fixes without new breakage. No browser claim is attached to these changes. The dedicated warning and page-level Undo need rendered placement/keyboard verification once legitimately permitted browser access is available.

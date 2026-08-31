@@ -49,7 +49,7 @@ Selected existing vehicle photos and the original wordmark are retained. Their o
 
 ## Verification status
 
-All fourteen routes are implemented on `codex/carzone-modernization`. The final automated gate, `npm run check`, passed: **78 tests, 0 failures**, followed by a successful build and artifact verification. Independent task reviews approved the application source and the real-build integration test. Whole-branch review found storage-message, saved-removal Undo and content-checker issues; a regression-tested fix wave is implemented and awaiting scoped re-review. This is automated/code evidence, not whole-site visual acceptance.
+All fourteen routes are implemented on `codex/carzone-modernization`. The final automated gate, `npm run check`, passed: **78 tests, 0 failures**, followed by a successful build and artifact verification. Independent task reviews approved the application source and the real-build integration test. Whole-branch review found storage-message, saved-removal Undo and content-checker issues; one regression-tested fix wave resolved all three, and independent scoped re-review found no new breakage. This is automated/code evidence, not whole-site visual acceptance.
 
 First-homepage desktop/mobile captures verified local CSS/fonts/images, visible copy, no console errors, and fixed 44px finder controls plus menu Escape/focus restoration. Later tablet/narrow-screen fixes are implemented but have not been recaptured.
 
