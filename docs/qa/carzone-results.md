@@ -1,6 +1,6 @@
 # Carzone modernization verification
 
-Date: 2026-08-31 (Asia/Dhaka). Target: local generated application only; no deployment.
+Date: 2026-08-31 (Asia/Dhaka). This records the local implementation acceptance snapshot. The later, separately authorized GitHub update and Vercel publication are recorded in [the deployment record](vercel-deployment.md); publication does not close the browser/visual gate.
 
 ## Environment
 
@@ -74,7 +74,7 @@ Follow [the browser checklist](carzone-browser-checklist.md) and the approved pl
 
 ## Acceptance status
 
-Automated build/test/artifact gate: passed. Whole-site Product Design/browser acceptance: **blocked**, not complete. Remaining work is permitted-browser journey, keyboard/zoom checks and paired final reference comparisons. No push, merge, deployment, real form submission or data export was performed.
+Automated build/test/artifact gate: passed. Whole-site Product Design/browser acceptance: **blocked**, not complete. Remaining work is permitted-browser journey, keyboard/zoom checks and paired final reference comparisons. At the end of this implementation phase, no push, merge, deployment, real form submission or data export had been performed. The later publication was separately requested; no real form submission or data export is part of it.
 
 ## Final whole-branch source review
 

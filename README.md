@@ -1,6 +1,8 @@
 # Carzone
 
-A cinematic automotive portfolio demo with a practical browsing, shortlist and comparison experience. This is **not a live dealership**: vehicles, prices, specifications and reviews are illustrative. Nothing is sold, sent or published.
+A cinematic automotive portfolio demo with a practical browsing, shortlist and comparison experience. This is **not a live dealership**: vehicles, prices, specifications and reviews are illustrative. Forms never send enquiries, publish reviews or sell a vehicle.
+
+[Live portfolio demo](https://carzone-psi.vercel.app) · [Deployment record](docs/qa/vercel-deployment.md)
 
 ## Run locally
 
@@ -27,6 +29,8 @@ npm run check    # Tests, build, and independent artifact verification
 Publication and the GitHub repository update were separately authorized after the implementation review. `vercel.json` selects the static/Other preset, installs the lockfile with `npm ci`, builds and checks the artifact, and publishes **only `dist/`**. HTML extensions are retained; there is no SPA fallback rewrite. Node24 is pinned by `package.json`.
 
 The CLI upload excludes historical root HTML/CSS/JS, design/QA documents and local task files through `.vercelignore`; required original images and generated source assets remain build inputs. Local Vercel metadata and environment files are Git-ignored. No application secrets or runtime environment variables are required. The remaining browser/visual acceptance limitation below is unchanged by deployment.
+
+The Vercel `carzone` project is connected to `rohanahmed24/Carzone`; pushes to `main` trigger production builds. The first production release reached **READY** with successful remote build and artifact verification. See the deployment record for the source revision and observed scope.
 
 ## Architecture
 
