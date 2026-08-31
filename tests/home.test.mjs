@@ -1,0 +1,65 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {renderHome} from '../src/pages/home.mjs';
+import {renderShell} from '../src/ui/shell.mjs';
+import {escapeHtml} from '../src/ui/escape.mjs';
+import {formatPrice,formatKm} from '../src/ui/format.mjs';
+import {mountDialog} from '../src/browser/dialog.mjs';
+import {mountHome} from '../src/browser/home.mjs';
+test('home has real content, local assets and a disabled no-JS finder', () => {
+  const html = renderShell(renderHome());
+  assert.match(html,/Find your next great drive\./);
+  assert.match(html,/<html lang="en"/);
+  assert.match(html,/id="finder"/);
+  assert.match(html,/<fieldset disabled/);
+  assert.match(html,/Demo portfolio/);
+  assert.doesNotMatch(html,/webflow\.js|jquery|WebFont\.load|href="#"|style="opacity:\s*0/);
+  assert.ok(html.indexOf('City sedan') < html.indexOf('Sport sedan'));
+  assert.match(html,/Family SUV/);
+  assert.equal((html.match(/<h1[ >]/g)||[]).length,1);
+  assert.equal((html.match(/fetchpriority="high"/g)||[]).length,1);
+  assert.match(html,/hero-1920.webp 1672w/);
+  assert.match(html,/width="1672" height="941"/);
+  assert.match(html,/src="\/assets\/brand\/carzone-logo.png"/);
+  assert.match(html,/type="module" src="\/assets\/browser\/main.mjs"/);
+});
+test('shared formatting escapes data and preserves missing values', () => {
+  assert.equal(escapeHtml('<a "x">&\''),'&lt;a &quot;x&quot;&gt;&amp;&#39;');
+  assert.equal(formatKm(null),'Not provided');
+  assert.equal(formatKm(42000),'42,000 km');
+  assert.equal(formatPrice({priceUsd:null,availability:'upcoming'}),'Price not announced');
+  assert.equal(formatPrice({priceUsd:null,availability:'used'}),'Not provided');
+});
+test('dialog close and native Escape close restore the supplied opener',()=>{
+  const dialog=new EventTarget();
+  const closeButton=new EventTarget();
+  let focusCount=0;
+  dialog.querySelectorAll=()=>[closeButton];
+  dialog.showModal=()=>{dialog.open=true;};
+  dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new Event('close'));};
+  const controller=mountDialog(dialog,{isConnected:true,focus(){focusCount++;}});
+  controller.open();assert.equal(dialog.open,true);
+  closeButton.dispatchEvent(new Event('click'));assert.equal(dialog.open,false);assert.equal(focusCount,1);
+  controller.open();dialog.close();assert.equal(focusCount,2);
+});
+test('finder binds blockers and click before enabling and uses safe serialization',()=>{
+  const form=new EventTarget();const button=new EventTarget();let enabled=false;let navigated='';
+  const fieldset={set disabled(value){assert.equal(value,false);const event=new Event('submit',{cancelable:true});form.dispatchEvent(event);assert.equal(event.defaultPrevented,true);enabled=true;}};
+  form.querySelector=selector=>selector==='fieldset'?fieldset:button;
+  const doc={querySelector:()=>form,defaultView:{FormData:class extends URLSearchParams{constructor(){super('condition=used&budget=25000&body=sedan');}},location:{assign(value){navigated=value;}}}};
+  mountHome(doc);assert.equal(enabled,true);button.dispatchEvent(new Event('click'));
+  const url=new URL(navigated,'https://carzone.invalid/');
+  assert.equal(url.pathname,'/latest-cars.html');assert.equal(url.searchParams.get('view'),'all');assert.equal(url.searchParams.get('condition'),'used');assert.equal(url.searchParams.get('budget'),'25000');
+});
+test('dialog explicitly closes on scoped Escape keydown and native cancel',()=>{
+  const dialog=new EventTarget();let focusCount=0;
+  dialog.querySelectorAll=()=>[];
+  dialog.showModal=()=>{dialog.open=true;};
+  dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new Event('close'));};
+  const controller=mountDialog(dialog,{isConnected:true,focus(){focusCount++;}});
+  controller.open();
+  const escape=new Event('keydown',{cancelable:true});Object.defineProperty(escape,'key',{value:'Escape'});
+  dialog.dispatchEvent(escape);assert.equal(dialog.open,false);assert.equal(escape.defaultPrevented,true);assert.equal(focusCount,1);
+  controller.open();const cancel=new Event('cancel',{cancelable:true});dialog.dispatchEvent(cancel);
+  assert.equal(dialog.open,false);assert.equal(cancel.defaultPrevented,true);assert.equal(focusCount,2);
+});

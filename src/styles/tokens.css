@@ -1,0 +1,7 @@
+@font-face{font-family:Manrope;src:url('../fonts/manrope-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Manrope;src:url('../fonts/manrope-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:Manrope;src:url('../fonts/manrope-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:Manrope;src:url('../fonts/manrope-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Barlow Condensed';src:url('../fonts/barlow-condensed-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Barlow Condensed';src:url('../fonts/barlow-condensed-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+:root{--red:#d81416;--graphite:#111214;--paper:#fff;--ink:#111214;--muted:#565b61;--line:#d9dde1;--control-border:#858a90;--gutter:clamp(20px,4.45vw,64px);--content:1312px;--radius:6px}
