@@ -1,6 +1,6 @@
 # Carzone: cinematic discovery, practical decisions
 
-Date: 2026-08-31. Status: recommended direction accepted in principle; consolidated visual and written specification ready for user review. No application implementation or deployment is included in this design pass.
+Date: 2026-08-31. Status: approved by the user on 2026-08-31 with “approved”; ready for implementation planning. No application implementation or deployment is included in this design pass.
 
 ## Decision
 
@@ -142,4 +142,4 @@ Guided finder, AI assistant, live valuations, dealer inventory feeds, accounts, 
 
 ## Review record
 
-The user accepted following the recommendation rather than choosing a numbered mockup. The recommendation has therefore been made explicit here as a cinematic homepage plus a practical inventory journey, not an unrequested combination of every feature. Independent scope review clarified route fallbacks, upcoming status, separate save/compare state, and genuinely local-only forms. The specification and refined visual still require the written-spec review step before implementation planning.
+The user accepted following the recommendation rather than choosing a numbered mockup. The recommendation has therefore been made explicit here as a cinematic homepage plus a practical inventory journey, not an unrequested combination of every feature. Independent scope review clarified route fallbacks, upcoming status, separate save/compare state, and genuinely local-only forms. The user then explicitly approved this specification on 2026-08-31. Route-family visual references remain an implementation prerequisite, not a request to repeat the overall direction choice.
