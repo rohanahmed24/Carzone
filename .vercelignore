@@ -1,0 +1,14 @@
+.git/
+.superpowers/
+.agents/
+.worktrees/
+.tmp/
+.env*
+node_modules/
+dist/
+docs/
+README.md
+design-qa.md
+/*.html
+/css/
+/js/

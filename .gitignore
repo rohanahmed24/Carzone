@@ -3,3 +3,5 @@ dist/
 .worktrees/
 .tmp/
 .DS_Store
+.vercel/
+.env*

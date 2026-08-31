@@ -20,7 +20,13 @@ npm run preview  # Serve the existing dist/ build on 127.0.0.1:4176
 npm run check    # Tests, build, and independent artifact verification
 ```
 
-**Serve/deploy `dist/` only.** Do not serve the repository root: its historical HTML still belongs to the original Webflow export. No deployment or Git push is part of this modernization.
+**Serve/deploy `dist/` only.** Do not serve the repository root: its historical HTML still belongs to the original Webflow export.
+
+## Vercel deployment
+
+Publication and the GitHub repository update were separately authorized after the implementation review. `vercel.json` selects the static/Other preset, installs the lockfile with `npm ci`, builds and checks the artifact, and publishes **only `dist/`**. HTML extensions are retained; there is no SPA fallback rewrite. Node24 is pinned by `package.json`.
+
+The CLI upload excludes historical root HTML/CSS/JS, design/QA documents and local task files through `.vercelignore`; required original images and generated source assets remain build inputs. Local Vercel metadata and environment files are Git-ignored. No application secrets or runtime environment variables are required. The remaining browser/visual acceptance limitation below is unchanged by deployment.
 
 ## Architecture
 
