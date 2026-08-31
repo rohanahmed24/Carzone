@@ -11,21 +11,23 @@ Date: 2026-08-31 (Asia/Dhaka). Target: local generated application only; no depl
 
 ## Final automated evidence
 
-Application Tasks1–11 have scoped independent spec/quality approval. After source commit `132f5f8`, the canonical `npm run check` completed with exit0: **73 tests passed, 0 failed**, then `Carzone built to dist.` and `Artifact verification passed.` The new real-build integration test is committed as `da693eb`; its independent scoped review approved spec compliance and quality with no findings. Individual RED/GREEN reports remain in the implementation ledger. Final whole-branch review is pending.
+Application Tasks1–11 have scoped independent spec/quality approval. The real-build integration test is committed as `da693eb`; its independent scoped review approved spec compliance and quality with no findings. That initial final gate passed73/73. Whole-branch review then identified two selection-controller issues and one artifact-checker weakness, all handled in one bounded fix wave.
 
-The artifact tests ran the real `build(root)` and `checkArtifact(root)` in a fresh temporary directory: initial RED8/9 (only the then-missing style-guide route), final GREEN9/9. The fixed route list independently checks all fourteen paths rather than trusting the renderer registry. Metadata, local assets/imports/fragments, CSP, approved output paths and legacy/placeholder checks passed. This establishes the automated gate, not whole-site browser acceptance.
+The latest canonical `npm run check` after that fix wave completed with exit0: **78 tests passed, 0 failed**, then `Carzone built to dist.` and `Artifact verification passed.` Focused final tests passed27/27. The earlier RED run failed four of26 focused tests as expected, reproducing missing persistence visibility/binding, toggle-removal Undo and shell-only main content. Final scoped re-review is pending. Individual RED/GREEN reports remain in the implementation ledger.
+
+The artifact tests ran the real `build(root)` and `checkArtifact(root)` in a fresh temporary directory: initial RED8/9 (only the then-missing style-guide route), then GREEN9/9. The later content regression also rejects routes whose meaningful text exists only in the shared shell; route-specific main content excludes the heading. The fixed route list independently checks all fourteen paths rather than trusting the renderer registry. Metadata, local assets/imports/fragments, CSP, approved output paths and legacy/placeholder checks passed. This establishes the automated gate, not whole-site browser acceptance.
 
 All fourteen routes: `index.html`, `latest-cars.html`, `popular-cars.html`, `upcoming-cars.html`, `car-details.html`, `used-car-details.html`, `car-specification.html`, `car-price.html`, `car-review.html`, `car-valuation.html`, `compare-car.html`, `sell-your-car.html`, `write-review.html`, `style-guide.html`.
 
 ### Generated artifact size
 
-Measured after the final build: **95 files, 1,019,399 bytes**. Homepage HTML:10,252 bytes.
+Measured after the final fix-wave build: **96 files, 1,025,287 bytes**.
 
 | Type | Files | Bytes |
 |---|---:|---:|
-| HTML | 14 | 140,150 |
+| HTML | 14 | 144,210 |
 | CSS | 8 | 29,549 |
-| MJS | 25 | 74,762 |
+| MJS | 26 | 76,590 |
 | WebP | 28 | 654,440 |
 | WOFF2 | 6 | 101,288 |
 | SVG | 10 | 3,605 |
@@ -72,3 +74,11 @@ Follow [the browser checklist](carzone-browser-checklist.md) and the approved pl
 ## Acceptance status
 
 Automated build/test/artifact gate: passed. Whole-site Product Design/browser acceptance: **blocked**, not complete. Remaining work is permitted-browser journey, keyboard/zoom checks and paired final reference comparisons. No push, merge, deployment, real form submission or data export was performed.
+
+## Final whole-branch source review
+
+- Important: storage write failure's temporary-mode warning was overwritten by an inaccurate persistent-save confirmation. The fix exposes read-only persistence state and keeps a dedicated storage-warning surface separate from action messages; unavailable/read/write/corrupt/getter fallback paths have local regressions.
+- Important: an active Saved row/detail toggle removed without Undo. Saved removals now use the same order-preserving undo operation, with page-level Undo when the drawer is closed and drawer-local Undo when open.
+- Minor: meaningful-content checking counted title/navigation/footer. The checker now requires route-specific main text beyond the heading and has a shell-preserving negative regression.
+
+Source fixes and automated gate complete; independent scoped re-review pending. No browser claim is attached to these changes. The dedicated warning and page-level Undo need rendered placement/keyboard verification once legitimately permitted browser access is available.

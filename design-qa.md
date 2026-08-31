@@ -39,7 +39,9 @@ Remaining inventory, vehicle, comparison and forms captures must each be paired 
 
 ### Final source polish and automated evidence
 
-All fourteen routes, including the production-component style guide, are implemented. Task11 source review approved the responsive changes, nearest-neighbour comparison focus restoration, readable shared CSS and safe optional/reduced-motion behavior. The final `npm run check` passed73/73 tests, built the artifact and passed its independent checker. These results do not substitute for rendered comparisons.
+All fourteen routes, including the production-component style guide, are implemented. Task11 source review approved the responsive changes, nearest-neighbour comparison focus restoration, readable shared CSS and safe optional/reduced-motion behavior. After the final review fix wave, `npm run check` passed78/78 tests, built the artifact and passed its independent checker. These results do not substitute for rendered comparisons.
+
+The final source fix wave adds an enduring storage-warning surface and page-level Undo for saved-toggle removals, retaining the shared shell's existing visual primitives. Their semantics are tested locally; their final rendered placement, wrapping and focus behavior require the same blocked browser acceptance as the other changed surfaces.
 
 Source-color calculations: red/white5.209:1, muted/white6.852:1, control boundary/white3.479:1, error/white7.072:1, focus blue/white5.266:1 and focus blue/graphite3.559:1. These are intended solid-color pairings, not measurements of every rendered state/background.
 
