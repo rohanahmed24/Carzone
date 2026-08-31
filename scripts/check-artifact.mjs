@@ -189,7 +189,9 @@ export async function checkArtifact(root) {
     if (!title) issues.push(`${route}: missing title`); else if (titles.has(title)) issues.push(`${route}: duplicate title also used by ${titles.get(title)}`); else titles.set(title, route);
     if (!description) issues.push(`${route}: missing description`); else if (descriptions.has(description)) issues.push(`${route}: duplicate description also used by ${descriptions.get(description)}`); else descriptions.set(description, route);
     if ((html.match(/<h1(?:\s|>)/gi) ?? []).length !== 1) issues.push(`${route}: expected one h1`);
-    if (meaningfulText(html).length < 30) issues.push(`${route}: route content is not meaningful`);
+    const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? '';
+    const routeContent = main.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi,'');
+    if (meaningfulText(routeContent).length < 30) issues.push(`${route}: route content is not meaningful`);
     if (!/<meta\b(?=[^>]*\bhttp-equiv\s*=\s*["']content-security-policy["'])[^>]*\bcontent\s*=/i.test(html)) issues.push(`${route}: missing CSP meta policy`);
     for (const attribute of attributes(html)) {
       const values = attribute.name === 'srcset' ? attribute.value.split(',').map(item => item.trim().split(/\s+/)[0]) : [attribute.value];

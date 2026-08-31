@@ -6,6 +6,97 @@ import {mountCompare} from '../src/browser/compare.mjs';
 import {createStore} from '../src/domain/store.mjs';
 import {vehicles} from '../src/domain/catalogue.mjs';
 import {mountSaved, syncSelection} from '../src/browser/saved.mjs';
+import {renderShell} from '../src/ui/shell.mjs';
+
+function savedFixture(storage) {
+  const doc = new EventTarget();
+  const dialog = new EventTarget();
+  let focused;
+  const control = name => ({isConnected:true,focus(){focused=name;}});
+  const close = control('close');
+  const makeUndo = name => {
+    const button = control(name), message = {};
+    return {hidden:true,querySelector:selector=>selector === 'p' ? message : button};
+  };
+  const drawerUndo = makeUndo('drawer-undo'), pageUndo = makeUndo('page-undo');
+  const status = {}, drawerStatus = {}, warning = {hidden:true}, drawerWarning = {hidden:true};
+  const list = {dataset:{},querySelector:()=>control('drawer-remove')};
+  dialog.open = false;
+  dialog.querySelectorAll = () => [];
+  dialog.querySelector = () => close;
+  const elements = {'#saved-dialog':dialog,'[data-saved-list]':list,'[data-saved-undo]':drawerUndo,'[data-page-saved-undo]':pageUndo,'[data-status]':status,'[data-saved-status]':drawerStatus};
+  doc.querySelector = selector => elements[selector] ?? null;
+  doc.querySelectorAll = selector => selector === '[data-storage-warning]' ? [warning,drawerWarning] : [];
+  doc.body = {dataset:{controller:'home'}};
+  doc.defaultView = storage === 'getter-failure' ? Object.defineProperty({},'localStorage',{get(){throw new Error('blocked getter');}}) : {localStorage:storage};
+  const click = (dataset, isConnected = true) => {
+    const button = {...control('toggle'),isConnected,dataset,hasAttribute:name=>name.replace(/^data-/, '').replace(/-([a-z])/g,(_m,c)=>c.toUpperCase()) in dataset};
+    const event = new Event('click');
+    Object.defineProperty(event,'target',{value:{closest:()=>button}});
+    doc.dispatchEvent(event);
+    return button;
+  };
+  return {doc,dialog,status,drawerStatus,warning,drawerWarning,drawerUndo,pageUndo,click,get focused(){return focused;}};
+}
+
+test('integrated saved actions retain a separate warning for every storage fallback', async () => {
+  const {createPageStore} = await import('../src/browser/store.mjs');
+  for (const storage of [null,'getter-failure',{getItem(){throw new Error('read');}}, {getItem:()=>null,setItem(){throw new Error('write');}}, {getItem:()=>'{corrupt',setItem(){throw new Error('must not write');}}]) {
+    const f = savedFixture(storage);
+    const store = createPageStore(f.doc);
+    mountSaved(f.doc,store);
+    f.click({save:'city-sedan'});
+    assert.match(f.status.textContent,/saved for this page only/);
+    assert.equal(f.warning.hidden,false);
+    assert.match(f.warning.textContent,/page|temporary/);
+    const warning = f.warning.textContent;
+    f.dialog.open = true;
+    f.click({save:'sport-sedan'});
+    assert.match(f.drawerStatus.textContent,/saved for this page only/);
+    assert.equal(f.warning.textContent,warning);
+    assert.equal(f.drawerWarning.textContent,warning);
+  }
+});
+
+test('active row and detail save toggles expose Undo outside the drawer and preserve order', () => {
+  const f = savedFixture(null);
+  const store = createStore({validIds:new Set(vehicles.map(v=>v.id)),storage:null});
+  mountSaved(f.doc,store);
+  for (const id of ['city-sedan','sport-sedan','family-suv']) f.click({save:id});
+  for (const open of [false,true]) {
+    f.dialog.open = open;
+    f.click({save:'sport-sedan'});
+    assert.equal(f.pageUndo.hidden,false);
+    assert.equal(f.drawerUndo.hidden,false);
+    assert.match((open ? f.drawerStatus : f.status).textContent,/Undo is available/);
+    f.click({undoSaved:''});
+    assert.deepEqual(store.snapshot().saved,['city-sedan','sport-sedan','family-suv']);
+    assert.equal(f.pageUndo.hidden,true);
+    assert.equal(f.drawerUndo.hidden,true);
+    assert.equal(f.focused,open ? 'drawer-remove' : 'toggle');
+  }
+  f.click({removeSaved:'sport-sedan'},false);
+  assert.equal(f.focused,'drawer-undo');
+  f.click({save:'touring-coupe'});
+  f.click({undoSaved:''});
+  assert.deepEqual(store.snapshot().saved,['city-sedan','sport-sedan','family-suv','touring-coupe']);
+});
+
+test('working storage confirms device saves and shell provides reachable warning and Undo surfaces', async () => {
+  const {createPageStore} = await import('../src/browser/store.mjs');
+  const writes = [];
+  const f = savedFixture({getItem:()=>null,setItem:(_key,value)=>writes.push(JSON.parse(value))});
+  mountSaved(f.doc,createPageStore(f.doc));
+  f.click({save:'city-sedan'});
+  assert.equal(f.status.textContent,'City sedan saved on this device.');
+  assert.equal(f.warning.hidden,true);
+  assert.deepEqual(writes,[{saved:['city-sedan'],compare:[]}]);
+  const html = renderShell({title:'Fixture',description:'Fixture',body:'<h1>Fixture</h1>',controller:'home'});
+  const outsideDialogs = html.replace(/<dialog\b[^>]*>[\s\S]*?<\/dialog>/g,'');
+  assert.match(outsideDialogs,/data-page-saved-undo hidden><p><\/p><button type="button" data-undo-saved>Undo saved car removal/);
+  assert.match(outsideDialogs,/data-storage-warning role="status" hidden/);
+  assert.equal((html.match(/data-storage-warning role="status" hidden/g) ?? []).length,2);
+});
 
 function fixture(search, deviceIds = ['touring-coupe']) {
   const writes = [];

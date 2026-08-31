@@ -31,12 +31,14 @@ export function createStore({ validIds, storage, onNotice }) {
   const notifyNotice = typeof onNotice === 'function' ? onNotice : () => {};
   let adapter = storage;
   let persistenceAvailable = adapter !== null && adapter !== undefined;
+  let persistenceNotice = persistenceAvailable ? '' : STORAGE_NOTICE;
   let state = emptySelection();
 
   const markUnavailable = () => {
     if (!persistenceAvailable) return;
     persistenceAvailable = false;
     adapter = null;
+    persistenceNotice = STORAGE_NOTICE;
     notifyNotice(STORAGE_NOTICE);
   };
 
@@ -57,6 +59,7 @@ export function createStore({ validIds, storage, onNotice }) {
           state = emptySelection();
           persistenceAvailable = false;
           adapter = null;
+          persistenceNotice = CORRUPT_NOTICE;
           notifyNotice(CORRUPT_NOTICE);
         }
       }
@@ -112,6 +115,8 @@ export function createStore({ validIds, storage, onNotice }) {
 
   return {
     snapshot: () => copySelection(state),
+    // Read-only status, separate from the ID-only selection/storage contract.
+    persistence: () => ({available:persistenceAvailable,notice:persistenceNotice}),
 
     toggleSaved(id) {
       if (typeof id !== 'string' || !validIds.has(id)) {

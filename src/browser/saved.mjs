@@ -47,6 +47,18 @@ export function mountSaved(doc, store) {
   let undoCompare;
   const modal = mountDialog(dialog,{get isConnected(){ return opener?.isConnected; },focus(){ opener?.focus(); }});
   const savedUndo = doc.querySelector('[data-saved-undo]');
+  const pageSavedUndo = doc.querySelector('[data-page-saved-undo]');
+  const savedUndoSurfaces = [savedUndo,pageSavedUndo].filter(Boolean);
+  const persistenceCopy = () => store.persistence().available ? 'on this device' : 'for this page only';
+  const removeSaved = (id, button) => {
+    undoSaved = {restore:store.removeSaved(id),button};
+    savedUndoSurfaces.forEach(surface=>{
+      surface.hidden=false;
+      surface.querySelector('p').textContent=`${nameOf(id)} removed from saved cars.`;
+    });
+    if (!button.isConnected) (dialog.open ? savedUndo : pageSavedUndo)?.querySelector('button').focus();
+    announce(doc,`${nameOf(id)} removed. Undo is available.`);
+  };
   const selectionUndo = doc.querySelector('[data-selection-undo]');
   const drawerCompareUndo = doc.querySelector('[data-saved-comparison-undo]');
   const refresh = selection => {
@@ -75,20 +87,20 @@ export function mountSaved(doc, store) {
     if (!button || button.disabled) return;
     if (button.hasAttribute('data-save')) {
       const id = button.dataset.save;
-      if (store.toggleSaved(id)) announce(doc,`${nameOf(id)} ${store.snapshot().saved.includes(id) ? 'saved on this device' : 'removed from saved cars'}.`);
+      if (store.snapshot().saved.includes(id)) removeSaved(id,button);
+      else if (store.toggleSaved(id)) announce(doc,`${nameOf(id)} saved ${persistenceCopy()}.`);
     } else if (button.hasAttribute('data-remove-saved')) {
       const id = button.dataset.removeSaved;
-      undoSaved = store.removeSaved(id);
-      savedUndo.hidden = false;
-      savedUndo.querySelector('p').textContent = `${nameOf(id)} removed from saved cars.`;
-      savedUndo.querySelector('button').focus();
-      announce(doc,`${nameOf(id)} removed. Undo is available.`);
+      removeSaved(id,button);
     } else if (button.hasAttribute('data-undo-saved')) {
-      undoSaved?.();
+      if (!undoSaved) return;
+      undoSaved.restore();
+      const returnTo = undoSaved.button;
       undoSaved = null;
-      savedUndo.hidden = true;
-      (list.querySelector('[data-remove-saved]') ?? dialog.querySelector('[data-close-dialog]')).focus();
-      announce(doc,'Saved car restored.');
+      savedUndoSurfaces.forEach(surface=>{surface.hidden=true;});
+      (dialog.open ? list.querySelector('[data-remove-saved]') ?? dialog.querySelector('[data-close-dialog]')
+        : returnTo.isConnected ? returnTo : doc.querySelector('[data-open-saved]'))?.focus();
+      announce(doc,`Saved car restored ${persistenceCopy()}.`);
     } else if (doc.body.dataset.controller !== 'compare') {
       const id = button.dataset.compare ?? button.dataset.removeCompare;
       if (id) {

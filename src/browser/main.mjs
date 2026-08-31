@@ -1,5 +1,4 @@
-import {vehicles} from '../domain/catalogue.mjs';
-import {createStore} from '../domain/store.mjs';
+import {createPageStore} from './store.mjs';
 import {mountDialog} from './dialog.mjs';
 import {mountHome} from './home.mjs';
 import {mountInventory} from './inventory.mjs';
@@ -11,10 +10,7 @@ import {mountForms} from './forms.mjs';
 
 // This entry point is browser-only. Pure tests import individual controllers.
 const doc=document;
-const onNotice=text=>{doc.querySelector('[data-status]').textContent=text;};
-let storage=null;
-try { storage=doc.defaultView.localStorage; } catch { /* Store announces temporary mode. */ }
-const store=createStore({validIds:new Set(vehicles.map(v=>v.id)),storage,onNotice});
+const store=createPageStore(doc);
 const menuButton=doc.querySelector('[data-open-menu]');
 const menu=doc.querySelector('#mobile-menu');
 if(menuButton && menu && typeof menu.showModal==='function') {

@@ -5,6 +5,15 @@ import { createStore } from '../src/domain/store.mjs';
 
 const validIds = new Set(['a', 'b', 'c', 'd']);
 
+test('persistence state exposes temporary mode without changing selection snapshots', () => {
+  const store = createStore({validIds,storage:{getItem:()=>null,setItem(){throw new Error('quota');}}});
+  assert.deepEqual(store.persistence(),{available:true,notice:''});
+  store.toggleSaved('a');
+  assert.equal(store.persistence().available,false);
+  assert.match(store.persistence().notice,/last for this page/);
+  assert.deepEqual(store.snapshot(),{saved:['a'],compare:[]});
+});
+
 test('save is unlimited; compare is ordered and capped', () => {
   const notices = [];
   const store = createStore({ validIds, storage: null, onNotice: text => notices.push(text) });

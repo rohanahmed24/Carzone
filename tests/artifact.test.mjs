@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp, mkdir, rm, writeFile} from 'node:fs/promises';
+import {mkdtemp, mkdir, rm, writeFile, readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {checkArtifact} from '../scripts/check-artifact.mjs';
@@ -25,6 +25,16 @@ const page = (name, extra = '') => `<!doctype html><html lang="en"><head>
 <meta name="description" content="Description for ${name}"><meta http-equiv="Content-Security-Policy" content="default-src 'self'">
 <title>Carzone ${name}</title><link rel="stylesheet" href="assets/styles/app.css"></head>
 <body><main id="main"><h1>${name}</h1><p>This is useful generated Carzone demo content for testing.</p>${extra}</main><script type="module" src="assets/browser/app.mjs"></script></body></html>`;
+
+test('real shared shell and a long heading cannot substitute for main content', async t => {
+  const root = await mkdtemp(path.join(tmpdir(),'carzone-empty-main-'));
+  t.after(()=>rm(root,{recursive:true,force:true}));
+  await build(root);
+  const filename = path.join(root,'latest-cars.html');
+  const html = await readFile(filename,'utf8');
+  await writeFile(filename,html.replace(/<main\b[^>]*>[\s\S]*?<\/main>/i,'<main id="main"><h1>This deliberately long heading alone is not meaningful route content</h1></main>'));
+  assert.deepEqual(await checkArtifact(root),['latest-cars.html: route content is not meaningful']);
+});
 
 async function fixture(t, mutate = {}) {
   const root = await mkdtemp(path.join(tmpdir(), 'carzone-artifact-'));
