@@ -1,0 +1,30 @@
+.form-page{padding-block:56px 80px}
+.form-header{margin-bottom:40px}
+.form-header p{color:var(--muted);margin-top:20px}
+.form-layout{display:grid;grid-template-columns:minmax(220px,1fr) minmax(0,2.2fr);gap:48px}
+.form-context{padding-right:36px;border-right:1px solid var(--line)}
+.form-context h2{font-size:36px;margin-bottom:16px}
+.form-context img{display:block;width:100%;aspect-ratio:1.5;object-fit:contain;margin-bottom:24px}
+.form-context p,.form-context li{overflow-wrap:anywhere}
+.form-context ul{padding-left:24px}
+.form-context-price{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:600}
+[data-local-form]{min-width:0}
+[data-local-form] fieldset{border:0;padding:0;margin:0;min-width:0}
+.form-step-title{font-size:36px;margin-bottom:24px}
+.preview-field{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.preview-field label{font-weight:600}
+.preview-field input,.preview-field textarea,.preview-field select{width:100%;min-height:48px;background:#fff;color:var(--ink);border:1px solid var(--control-border);border-radius:var(--radius);padding:12px}
+.preview-field textarea{resize:vertical}
+.preview-field [aria-invalid=true]{border:2px solid #b20f11}
+.preview-field .error:empty{display:none}
+.form-errors{border-left:4px solid #b20f11;padding:16px;margin-bottom:24px;color:#b20f11}
+.form-actions{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;border-top:1px solid var(--line);padding-top:24px;margin-top:24px}
+.form-text-button{border-color:transparent;text-decoration:underline;text-underline-offset:5px}
+.form-reset{display:block;margin:24px auto;border-color:transparent}
+.form-review p{padding:20px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere;white-space:pre-wrap}
+.form-privacy{border-top:1px solid var(--line);padding-top:24px;color:var(--muted)}
+.enquiry-dialog{width:min(1000px,calc(100% - 40px));max-height:calc(100dvh - 40px);overflow:auto;padding:40px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.enquiry-dialog::backdrop{background:#111214b3}
+.form-close{display:flex;align-items:center;justify-content:center;margin-left:auto;margin-bottom:16px;width:44px;height:44px;padding:8px}
+.enquiry-dialog .form-header h2{font-size:56px}
+@media(max-width:700px){.form-page{padding-block:32px 48px}.form-layout{grid-template-columns:1fr;gap:32px}.form-context{padding:0 0 24px;border-right:0;border-bottom:1px solid var(--line)}.form-context img{max-height:180px}.form-header{margin-bottom:32px}.form-actions{flex-direction:column}.form-actions button{width:100%}.enquiry-dialog{padding:20px}.enquiry-dialog .form-header h2{font-size:40px}.form-step-title{font-size:36px}}
