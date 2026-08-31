@@ -55,7 +55,7 @@ test('controller isolates mobile drafts, restores on cancel, commits once and re
   win.matchMedia = () => media;
   const history = [];
   win.history = {pushState(_state,_unused,url){ history.push(url); }};
-  mountInventory(doc,{});
+  mountInventory(doc,{snapshot:()=>({saved:[],compare:[]})});
   assert.equal(desktopFields.disabled,true);
   assert.equal(mobileFields.disabled,true);
   const original = results.innerHTML;
@@ -119,4 +119,6 @@ test('rows use encoded identical return links and selected price order', () => {
   assert.match(html,/data-remove-filter="body"/);
   assert.match(html,/2 illustrative cars/);
   assert.match(html,/data-save="[^"]+"[^>]*disabled/);
+  assert.match(html,/data-remove-filter="condition" disabled/);
+  assert.match(html,/data-clear-filters disabled/);
 });

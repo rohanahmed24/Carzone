@@ -20,8 +20,8 @@ export function inventoryResults(filters, route) {
     <p role="status" aria-live="polite" data-result-count>${rows.length} illustrative ${rows.length === 1 ? 'car' : 'cars'}</p>
     ${filters.view === 'popular' ? '<p>Editorial sample selection.</p>' : ''}
     ${upcomingCandidates ? '<p>Unknown prices are excluded by this budget.</p>' : ''}
-    <div class="filter-chips" aria-label="Applied filters">${chips.map(([key,value]) => `<button type="button" data-remove-filter="${key}" aria-label="Remove ${e(filterOptions[key].find(option => option[0] === value)?.[1])} filter">${e(filterOptions[key].find(option => option[0] === value)?.[1])}<span class="icon icon-x" aria-hidden="true"></span></button>`).join('')}
-    ${chips.length ? '<button type="button" class="clear-filters" data-clear-filters>Clear filters</button>' : ''}</div>
+    <div class="filter-chips" aria-label="Applied filters">${chips.map(([key,value]) => `<button type="button" data-remove-filter="${key}" disabled aria-label="Remove ${e(filterOptions[key].find(option => option[0] === value)?.[1])} filter">${e(filterOptions[key].find(option => option[0] === value)?.[1])}<span class="icon icon-x" aria-hidden="true"></span></button>`).join('')}
+    ${chips.length ? '<button type="button" class="clear-filters" data-clear-filters disabled>Clear filters</button>' : ''}</div>
   </div>
-  ${rows.length ? rows.map(v => vehicleRow(v,{returnTo})).join('') : '<section class="inventory-empty"><h2>No cars match these filters.</h2><p>Try a different condition, budget or body style.</p><button type="button" class="button" data-clear-filters>Clear filters</button></section>'}`;
+  ${rows.length ? rows.map(v => vehicleRow(v,{returnTo})).join('') : '<section class="inventory-empty"><h2>No cars match these filters.</h2><p>Try a different condition, budget or body style.</p><button type="button" class="button" data-clear-filters disabled>Clear filters</button></section>'}`;
 }

@@ -1,0 +1,50 @@
+.compare-page { padding-block: 48px 24px; min-width: 0; }
+.compare-page > h1 { margin-bottom: 16px; }
+.compare-page > p { color: var(--muted); }
+.compare-static { border: 0; padding: 0; margin: 0; min-width: 0; }
+.compare-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 20px; }
+.compare-toolbar p { margin: 0; }
+.differences-toggle { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+.differences-toggle input { width: 22px; accent-color: var(--red); }
+.compare-selected { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; padding: 0; margin: 0 0 24px; }
+.compare-selected li { display: flex; align-items: center; gap: 12px; padding-left: 16px; border: 1px solid var(--line); border-radius: var(--radius); }
+.compare-selected button { display: flex; align-items: center; justify-content: center; border: 0; padding: 10px; }
+.compare-empty { padding-block: 32px; border-block: 1px solid var(--line); }
+.compare-empty h2 { margin-bottom: 16px; }
+.comparison-scroll-hint { color: var(--muted); }
+.comparison-scroll { overflow-x: auto; max-width: 100%; border: 1px solid var(--line); }
+.comparison-table { border-collapse: separate; border-spacing: 0; min-width: 760px; width: 100%; }
+.comparison-table th, .comparison-table td { padding: 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+.comparison-table th[scope="row"], .comparison-table thead th:first-child { position: sticky; left: 0; background: #fff; z-index: 1; min-width: 150px; }
+.comparison-table th[scope="col"]:not(:first-child) { min-width: 220px; width: 28%; }
+.comparison-table img { display: block; width: 240px; height: 150px; object-fit: contain; margin-bottom: 20px; }
+.comparison-table h2 { font-family: Manrope, sans-serif; font-size: 20px; line-height: 1.4; margin-bottom: 8px; }
+.comparison-table a { color: var(--red); font-weight: 500; display: inline-flex; align-items: center; min-height: 44px; }
+.comparison-table p { margin-bottom: 8px; }
+.compare-add { display: flex; flex-wrap: wrap; align-items: end; gap: 20px; padding: 24px 0; }
+.compare-add > div { display: grid; gap: 8px; flex: 1 1 250px; }
+.compare-add select { width: 100%; max-width: 100%; padding: 10px; background: #fff; }
+.compare-add p { flex: 1 1 240px; margin: 0; }
+.compare-add .button { gap: 8px; }
+.compare-add .button:disabled { background: #eceeef; color: var(--muted); border-color: var(--line); }
+.compare-tray { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 16px var(--gutter) max(16px,env(safe-area-inset-bottom)); background: var(--graphite); color: #fff; }
+.compare-tray ul { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.compare-tray li { display: flex; gap: 4px; align-items: center; }
+.compare-tray button { display: inline-flex; padding: 10px; border: 0; }
+.saved-list { list-style: none; margin: 0; padding: 0; }
+.saved-list li { display: grid; grid-template-columns: 144px minmax(0,1fr); gap: 20px; border-bottom: 1px solid var(--line); padding-block: 20px; }
+.saved-list img { object-fit: contain; width: 144px; height: 90px; }
+.saved-list h3 { font-size: 28px; margin-bottom: 8px; }
+.saved-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.saved-actions button { display: inline-flex; align-items: center; gap: 8px; }
+.selection-undo { padding: 16px var(--gutter); background: #fff; border-block: 1px solid var(--line); }
+[data-saved-undo], [data-compare-undo] { padding-block: 16px; }
+@media (max-width: 700px) {
+  .compare-page { padding-top: 32px; }
+  .compare-toolbar { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .comparison-table th, .comparison-table td { padding: 12px; }
+  .comparison-table th[scope="row"], .comparison-table thead th:first-child { min-width: 120px; max-width: 140px; }
+  .saved-list li { grid-template-columns: 1fr; gap: 12px; }
+  .compare-tray { gap: 12px; }
+  .compare-tray li { font-size: 16px; }
+}

@@ -1,6 +1,7 @@
 import {parseFilters, serializeFilters} from '../domain/query.mjs';
 import {inventoryResults} from '../ui/inventory.mjs';
 import {mountDialog} from './dialog.mjs';
+import {syncSelection} from './saved.mjs';
 
 const defaults = {view:'all',condition:'any',budget:'any',body:'any',sort:'featured'};
 
@@ -26,6 +27,8 @@ export function mountInventory(doc, store) {
 
   const render = () => {
     results.innerHTML = inventoryResults(current,route);
+    doc.querySelectorAll('[data-remove-filter], [data-clear-filters]').forEach(button => { button.disabled = false; });
+    syncSelection(doc,store.snapshot());
     doc.querySelectorAll('[data-inventory-view]').forEach(link => {
       const view = link.dataset.inventoryView;
       link.href = `${route}?${serializeFilters({...current,view})}`;
