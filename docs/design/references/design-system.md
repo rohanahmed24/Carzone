@@ -19,7 +19,7 @@ The user approved the consolidated direction and written spec, then requested im
 
 | Family | Exact primary text | Required continuation |
 |---|---|---|
-| Home | Find your next great drive. / Explore the cars. Understand the differences. Find what fits you. / Explore cars / Compare cars | Find what fits. / A few filters. A clearer shortlist. / Cars to explore / Illustrative listings / Price: low to high |
+| Home | Find your next great drive. / Explore the cars. Understand the differences. Find what fits you. / Explore cars / Compare cars | Find what fits. / A few filters. A clearer shortlist. / Cars to explore / Illustrative listings / Price: low to high / See all twelve / Look closer. / A short path. Local only. / Understand the differences. / Try the other routes. |
 | Inventory | Find what fits. / Explore illustrative cars. Build a shortlist that makes sense. | All cars / Latest / Popular / Upcoming; actual result count; filter chips; rows; useful zero-result state |
 | Vehicle | Selected record name / Illustrative vehicle / Illustrative listed price · USD / Return to results | Facts; Overview / Specifications / Price / Sample review; typed new/used/upcoming actions |
 | Comparison | Understand the differences. / Compare up to three illustrative cars side by side. | Differences only; actual selections; all/equal/missing rows; empty/one/limit states |
