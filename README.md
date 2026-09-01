@@ -61,13 +61,11 @@ Selected existing vehicle photos and the original wordmark are retained. Their o
 
 All fourteen routes are implemented on `codex/carzone-modernization`. The final automated gate, `npm run check`, passed: **78 tests, 0 failures**, followed by a successful build and artifact verification. Independent task reviews approved the application source and the real-build integration test. Whole-branch review found storage-message, saved-removal Undo and content-checker issues; one regression-tested fix wave resolved all three, and independent scoped re-review found no new breakage. This is automated/code evidence, not whole-site visual acceptance.
 
-First-homepage desktop/mobile captures verified local CSS/fonts/images, visible copy, no console errors, and fixed 44px finder controls plus menu Escape/focus restoration. Later tablet/narrow-screen fixes are implemented but have not been recaptured.
-
-Further real-browser testing is blocked by the selected browser's URL security policy. No alternate browser/port or indirect bypass was used. Remaining route-family visual comparisons, complete browser journeys, native keyboard cycling, 200% zoom, browser-storage/network observations and no-JS/reduced-motion browser emulation must not be treated as passed. Static/controller tests complement, but do not replace, those checks.
+First-homepage desktop/mobile captures verified local CSS/fonts/images, visible copy, no console errors, and fixed 44px finder controls plus menu Escape/focus restoration.
 
 The host also rewrites HTML response headers: native HTML/HEAD Content-Length and actual CSS network length are tested separately. Browser performance timings/transfer bytes are unavailable; file sizes are not labelled network measurements. No Lighthouse or Web Vitals score is claimed.
 
-The authoritative results and remaining gates are in [QA results](docs/qa/carzone-results.md) and [design QA](design-qa.md).
+A 2026-09-01 Playwright session recaptured home at 768 and 320 after Task11, ran the main journeys, then fixed three P2 issues (compare tray overlap, duplicate storage warning, sticky Saved Undo at 320). `npm run check`: **79 tests, 0 failures**. Whole-site Product Design pairing is still unfinished. Details: [QA results](docs/qa/carzone-results.md) and [design QA](design-qa.md).
 
 ## Project records
 
