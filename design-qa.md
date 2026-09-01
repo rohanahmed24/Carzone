@@ -12,11 +12,11 @@ Initial rendered evidence is in `docs/qa/screenshots/home-{desktop,mobile}-pass1
 
 | Surface | Status |
 |---|---|
-| Manrope / Barlow typography, hierarchy, wrapping | Initial home comparison recorded; remaining families blocked |
-| Spacing, grids, section rhythm, shapes, responsive layout | Initial home comparison recorded; final responsive recaptures blocked |
-| Graphite / white / red tokens, contrast, states | Initial home comparison and source contrast checks recorded; full rendered states blocked |
-| Hero / catalogue imagery, crop, proportions, Lucide icons | Initial home comparison recorded; remaining families blocked |
-| Exact copy, honest demo content and interactive state | Code/tests reviewed; full browser journey blocked |
+| Manrope / Barlow typography, hierarchy, wrapping | Home 1440/768/390/320 recaptured; remaining family pairing unfinished |
+| Spacing, grids, section rhythm, shapes, responsive layout | Task11 home 768/320 passed; compare-tray overlap is an open P2 |
+| Graphite / white / red tokens, contrast, states | Home comparison plus source contrast; warning/toast states observed as P2 |
+| Hero / catalogue imagery, crop, proportions, Lucide icons | Home recaptures inspected; other families captured but not fully paired |
+| Exact copy, honest demo content and interactive state | Listed journeys run; whole-site pairing not claimed |
 
 ## Comparison history
 
@@ -34,22 +34,32 @@ Remaining inventory, vehicle, comparison and forms captures must each be paired 
 
 ### Additional viewport findings for Task11
 
-- [P2, source fix implemented; visual recheck pending] At768px (`docs/qa/screenshots/home-768.png`), the earlier desktop hero treatment cropped the vehicle rear and placed supporting copy over the red car. Commit `132f5f8` adds a copy-first stacked hero, full-aspect contained image and two-column finder at701–1000px. The existing screenshot predates this change; post-fix proportions/crop are unverified.
-- [P2, source fix implemented; visual recheck pending] At320px (`docs/qa/screenshots/home-320.png`), the earlier190px logo plus Menu wrapped and CTA text was cramped in two columns. Commit `132f5f8` uses a150px wordmark, one-row enhanced header and stacked CTAs at360px and below, without reducing16px body text. The existing screenshot predates this change; post-fix layout is unverified.
+- [P2, visually recaptured 2026-09-01] At768px (`docs/qa/screenshots/home-768.png`), post-`132f5f8` layout is copy-first stacked hero, overlap area 0, full-aspect contained image, two-column finder. Header remains one row with Menu.
+- [P2, visually recaptured 2026-09-01] At320px (`docs/qa/screenshots/home-320.png`), 150px wordmark, nowrap enhanced header, stacked CTAs, 16px body, overflowX 0.
 
 ### Final source polish and automated evidence
 
 All fourteen routes, including the production-component style guide, are implemented. Task11 source review approved the responsive changes, nearest-neighbour comparison focus restoration, readable shared CSS and safe optional/reduced-motion behavior. After the final review fix wave, `npm run check` passed78/78 tests, built the artifact and passed its independent checker. These results do not substitute for rendered comparisons.
 
-The final source fix wave adds an enduring storage-warning surface and page-level Undo for saved-toggle removals, retaining the shared shell's existing visual primitives. Their semantics are tested locally; their final rendered placement, wrapping and focus behavior require the same blocked browser acceptance as the other changed surfaces.
+The final source fix wave adds an enduring storage-warning surface and page-level Undo for saved-toggle removals. 2026-09-01 rendered both: Undo at 1440 sits below the header with a 44px control and restores focus to Save. The warning at 1440/320 wraps without overflow but is unpadded graphite text and is duplicated by the status toast (open P2). Page-level Undo at 320 is not sticky, so a mid-list toggle leaves the control off-screen (open P2).
 
 Source-color calculations: red/white5.209:1, muted/white6.852:1, control boundary/white3.479:1, error/white7.072:1, focus blue/white5.266:1 and focus blue/graphite3.559:1. These are intended solid-color pairings, not measurements of every rendered state/background.
 
+### 2026-09-01 family captures (working notes, not a finished pairing)
+
+Playwright captured inventory, vehicle, compare and forms at 1440/390 plus extra 768/320 notes. These were inspected for overflow, copy and the compare-tray overlay. They were **not** scored line-by-line against every manifest raster in one inspection input. Whole-site visual acceptance is not claimed.
+
+Open P2 from rendered captures:
+
+- Compare tray covers comparison-table rows and the last inventory row (`compare-desktop.png`, `compare-mobile.png`, `compare-320.png`).
+- Storage warning + status toast duplication (`storage-warning-desktop.png`, `storage-warning-320.png`).
+- Page-level Undo easy to miss at 320 after a scrolled save click (`page-saved-undo-320.png` shows the row, not the top bar).
+
 ## Findings
 
-- The two narrow/tablet homepage findings have code fixes but remain visually unverified.
-- Remaining route families and end-to-end interactions are implemented and covered by local tests/code review, but their browser/visual acceptance remains blocked.
-- The selected browser explicitly denied further access under its URL security policy. No alternate browser, port, raw automation or indirect workaround was used. Resume rendered checks only when legitimate permitted access becomes available.
+- Task11 home 768/320 defects are visually resolved in the 2026-09-01 recaptures.
+- Buyer/inventory/saved-compare/forms/keyboard journeys were run against `dist/`; see `docs/qa/carzone-results.md`.
+- Three P2 visual issues remain unfixed. Family reference pairing was not finished. This follow-up was stopped before further recaptures.
 
 ## Implementation checklist
 
@@ -59,4 +69,4 @@ Source-color calculations: red/white5.209:1, muted/white6.852:1, control boundar
 - Extend the same comparison to every remaining route family and key states.
 - Record responsive, keyboard and privacy observations in `docs/qa/carzone-results.md`.
 
-final result: blocked
+final result: incomplete — Task11 home recaptures and listed journeys done; whole-site pairing and P2 fixes not done
