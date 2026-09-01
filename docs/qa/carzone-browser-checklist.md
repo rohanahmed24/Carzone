@@ -4,7 +4,7 @@ Scope: the fourteen existing routes in the approved modernization specification.
 
 The original checklist assumed the Codex in-app browser. The 2026-09-01 follow-up used Playwright against `http://127.0.0.1:4176/` (`dist/` only). Screenshots and observed outcomes belong in `carzone-results.md`; this checklist is not evidence of passing tests.
 
-**Current gate: incomplete.** 2026-09-01 Playwright against `http://127.0.0.1:4176/` (`dist/` only) ran the buyer / inventory / saved-compare / forms / keyboard / 14-route overflow checks recorded in `carzone-results.md`. Whole-site Product Design pairing is not finished. Three observed P2 issues were not fixed in this pass. Do not treat skipped pairing as a pass.
+**Current gate: incomplete pairing.** 2026-09-01 Playwright against `dist/` ran the listed journeys. The three observed P2 issues (compare tray, duplicate storage warning, 320 Saved Undo) are fixed and recaptured. Do not treat unfinished family pairing as a pass.
 
 ## Buyer journey and state
 

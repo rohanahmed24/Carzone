@@ -4,9 +4,9 @@ Date: 2026-08-31 (Asia/Dhaka), with a 2026-09-01 Playwright follow-up. The origi
 
 ## 2026-09-01 follow-up (Playwright against dist/)
 
-Environment: Node v24.20.0 via nvm (host `/exec-daemon/node` remains 22.14.0; checks used the nvm binary). `npm ci` then `npm run check` on this checkout: **78 tests passed, 0 failed**, `Carzone built to dist.`, `Artifact verification passed.` Preview: `npm run preview` at `http://127.0.0.1:4176/`, serving `dist/` only. Browser: Playwright MCP Chromium, not the earlier Codex in-app browser. Favicon.ico 404 is the only console error observed (browser-default request; not an application asset).
+Environment: Node v24.20.0 via nvm (host `/exec-daemon/node` remains 22.14.0; checks used the nvm binary). Preview: `npm run preview` at `http://127.0.0.1:4176/`, serving `dist/` only. Browser: Playwright Chromium. After the P2 CSS/JS fixes, `npm run check`: **79 tests passed, 0 failed** (one new regression for the storage-warning/toast split), then `Carzone built to dist.` and `Artifact verification passed.`
 
-This follow-up was stopped before a complete visual-acceptance matrix. No application CSS/JS fixes were landed. Remaining P2 findings below are observed, not marked passed.
+This follow-up was stopped before a complete visual-acceptance matrix. The three observed P2 issues were then fixed in application CSS/JS on this branch and recaptured.
 
 ### Recaptured homepage after Task11 (`132f5f8`)
 
@@ -29,13 +29,13 @@ Keyboard: skip link Tab showed **Skip to content** at `top: 12`. Mobile menu Ent
 
 Fourteen routes × 1440/768/390/320: **56/56** with `overflowX ≤ 1` and no `href="#"` placeholders. Reduced-motion emulation: `prefers-reduced-motion: reduce` matched, hero animations 0, opacity 1. No-JS: readable home/inventory, finder and form fieldsets disabled, no submit control, 320px header wraps to expose desktop-nav links (documented no-JS behaviour). CSS `zoom: 2` at 1440 reported overflowX 23; CDP `setPageScaleFactor(2)` reported overflowX 0. Treat 200% as partial, not a pass.
 
-Storage warning (localStorage getter throws): copy **Device storage unavailable; changes last for this page.** at 1440 (`top: 88`, height 26, 16px, transparent background, 0 padding) and 320 (height 51, width 265, overflowX 0). The same copy also appears in the floating `.status` toast. Page-level Undo at 320 measured 208×48 with overflowX 0; the viewport capture scrolled to the clicked row, so the top Undo bar is not in `page-saved-undo-320.png`.
+Pre-fix storage warning (localStorage getter throws) was unpadded graphite text plus a duplicate `[data-status]` toast; pre-fix page-level Undo at 320 was not sticky. Those three P2s are recaptured after the CSS/JS fixes below.
 
-### Open P2 findings (observed, not fixed)
+### P2 fixes (recaptured)
 
-1. **Compare tray covers page content.** On `compare-car.html` with three cars, the shell tray overlapped Availability (28px) and Body style (55px). On inventory it overlapped the last vehicle row by 84px (`body` padding-bottom 0). Mobile/320 compare captures show the tray over the table header/image. Hide the tray on the compare route and reserve space when it is visible elsewhere.
-2. **Storage-warning surface is visually weak and duplicated.** Dedicated `[data-storage-warning]` is unpadded graphite body text flush under the header; `[data-status]` repeats the same sentence and, at 320, covers the Compare cars control.
-3. **Page-level Undo is easy to miss after a mid-list save toggle at 320** because it is not sticky; the toast says undo is available but does not contain the control.
+1. **Compare tray.** The tray is `position: fixed` and hidden on `compare-car.html` (`display: none`). Inventory/home reserve `padding-bottom: 96px` while the tray is open. Recapture: `compare-desktop.png`, `compare-320.png`. Measured Availability overlap 0; tray display `none` on compare; inventory last-row overlap 0 with tray visible.
+2. **Storage warning.** Persistence notices stay on `[data-storage-warning]` only; they are not copied into `[data-status]`. Banner padding `12px 0 16px` with wrapping. Recapture: `storage-warning-320.png`. Toast empty; Compare cars uncovered.
+3. **Page-level Saved Undo.** `[data-page-saved-undo]` is `position: sticky; top: 0`. Recapture: `page-saved-undo-320.png` after unsaving Family SUV mid-list. Undo bar `top: 0`, in view, button 208×48.
 
 Whole-site paired reference comparison is **not** complete. Family captures exist as working notes (`inventory-*`, `vehicle-*`, `compare-*`, `forms-*`) but were not scored against every manifest raster in one inspection pass.
 
@@ -113,7 +113,7 @@ Follow [the browser checklist](carzone-browser-checklist.md) and the approved pl
 
 ## Acceptance status
 
-Automated build/test/artifact gate: **passed** (reconfirmed 2026-09-01). Permitted Playwright journeys listed above were actually run against `dist/`. Whole-site Product Design acceptance is **not complete**: family reference pairing was not finished, three P2 visual issues remain unfixed, and this follow-up was stopped before further recaptures. No real form submission or data export.
+Automated build/test/artifact gate: **passed** (79 tests after the P2 regressions). The three observed P2 visual issues are fixed and recaptured. Whole-site Product Design pairing is still not a finished gate. No real form submission or data export.
 
 ## Final whole-branch source review
 

@@ -65,7 +65,7 @@ First-homepage desktop/mobile captures verified local CSS/fonts/images, visible 
 
 The host also rewrites HTML response headers: native HTML/HEAD Content-Length and actual CSS network length are tested separately. Browser performance timings/transfer bytes are unavailable; file sizes are not labelled network measurements. No Lighthouse or Web Vitals score is claimed.
 
-A 2026-09-01 Playwright session recaptured home at 768 and 320 after Task11, ran the main buyer/inventory/saved-compare/forms/keyboard journeys, and measured all fourteen routes at four widths. Whole-site Product Design pairing is still unfinished. Observed unfixed P2: compare tray overlapping content, duplicated/unstyled storage warning, page-level Undo easy to miss at 320. Details: [QA results](docs/qa/carzone-results.md) and [design QA](design-qa.md).
+A 2026-09-01 Playwright session recaptured home at 768 and 320 after Task11, ran the main journeys, then fixed three P2 issues (compare tray overlap, duplicate storage warning, sticky Saved Undo at 320). `npm run check`: **79 tests, 0 failures**. Whole-site Product Design pairing is still unfinished. Details: [QA results](docs/qa/carzone-results.md) and [design QA](design-qa.md).
 
 ## Project records
 

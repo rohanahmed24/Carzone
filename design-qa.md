@@ -13,8 +13,8 @@ Initial rendered evidence is in `docs/qa/screenshots/home-{desktop,mobile}-pass1
 | Surface | Status |
 |---|---|
 | Manrope / Barlow typography, hierarchy, wrapping | Home 1440/768/390/320 recaptured; remaining family pairing unfinished |
-| Spacing, grids, section rhythm, shapes, responsive layout | Task11 home 768/320 passed; compare-tray overlap is an open P2 |
-| Graphite / white / red tokens, contrast, states | Home comparison plus source contrast; warning/toast states observed as P2 |
+| Spacing, grids, section rhythm, shapes, responsive layout | Task11 home 768/320 passed; compare tray no longer covers table/last row |
+| Graphite / white / red tokens, contrast, states | Home comparison plus source contrast; storage warning is a single padded banner |
 | Hero / catalogue imagery, crop, proportions, Lucide icons | Home recaptures inspected; other families captured but not fully paired |
 | Exact copy, honest demo content and interactive state | Listed journeys run; whole-site pairing not claimed |
 
@@ -41,25 +41,25 @@ Remaining inventory, vehicle, comparison and forms captures must each be paired 
 
 All fourteen routes, including the production-component style guide, are implemented. Task11 source review approved the responsive changes, nearest-neighbour comparison focus restoration, readable shared CSS and safe optional/reduced-motion behavior. After the final review fix wave, `npm run check` passed78/78 tests, built the artifact and passed its independent checker. These results do not substitute for rendered comparisons.
 
-The final source fix wave adds an enduring storage-warning surface and page-level Undo for saved-toggle removals. 2026-09-01 rendered both: Undo at 1440 sits below the header with a 44px control and restores focus to Save. The warning at 1440/320 wraps without overflow but is unpadded graphite text and is duplicated by the status toast (open P2). Page-level Undo at 320 is not sticky, so a mid-list toggle leaves the control off-screen (open P2).
+The final source fix wave adds an enduring storage-warning surface and page-level Undo for saved-toggle removals. 2026-09-01 then fixed the rendered P2s: persistence copy lives only on the padded banner (no duplicate toast), and page-level Undo is sticky at 320 after a mid-list unsave. Undo at 1440 still sits below the header with a 44px control.
 
 Source-color calculations: red/white5.209:1, muted/white6.852:1, control boundary/white3.479:1, error/white7.072:1, focus blue/white5.266:1 and focus blue/graphite3.559:1. These are intended solid-color pairings, not measurements of every rendered state/background.
 
 ### 2026-09-01 family captures (working notes, not a finished pairing)
 
-Playwright captured inventory, vehicle, compare and forms at 1440/390 plus extra 768/320 notes. These were inspected for overflow, copy and the compare-tray overlay. They were **not** scored line-by-line against every manifest raster in one inspection input. Whole-site visual acceptance is not claimed.
+Playwright captured inventory, vehicle, compare and forms at 1440/390 plus extra 768/320 notes. Three P2 issues from those captures were fixed and recaptured:
 
-Open P2 from rendered captures:
+- Compare tray no longer covers the table (`compare-desktop.png`, `compare-320.png`). Inventory last-row overlap measured 0 with the tray open.
+- Storage warning is a single padded banner; the toast is empty (`storage-warning-320.png`).
+- Page-level Saved Undo sticks at the top after a mid-list unsave at 320 (`page-saved-undo-320.png`).
 
-- Compare tray covers comparison-table rows and the last inventory row (`compare-desktop.png`, `compare-mobile.png`, `compare-320.png`).
-- Storage warning + status toast duplication (`storage-warning-desktop.png`, `storage-warning-320.png`).
-- Page-level Undo easy to miss at 320 after a scrolled save click (`page-saved-undo-320.png` shows the row, not the top bar).
+Family reference pairing against every manifest raster remains unfinished.
 
 ## Findings
 
 - Task11 home 768/320 defects are visually resolved in the 2026-09-01 recaptures.
 - Buyer/inventory/saved-compare/forms/keyboard journeys were run against `dist/`; see `docs/qa/carzone-results.md`.
-- Three P2 visual issues remain unfixed. Family reference pairing was not finished. This follow-up was stopped before further recaptures.
+- The three observed P2 visual issues are fixed in CSS/JS and recaptured. Whole-site pairing is not claimed complete.
 
 ## Implementation checklist
 
@@ -69,4 +69,4 @@ Open P2 from rendered captures:
 - Extend the same comparison to every remaining route family and key states.
 - Record responsive, keyboard and privacy observations in `docs/qa/carzone-results.md`.
 
-final result: incomplete — Task11 home recaptures and listed journeys done; whole-site pairing and P2 fixes not done
+final result: incomplete pairing — Task11 recaptures, listed journeys, and three P2 fixes done

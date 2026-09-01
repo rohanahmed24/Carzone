@@ -58,6 +58,17 @@ test('integrated saved actions retain a separate warning for every storage fallb
   }
 });
 
+test('persistence fallback uses the warning surface without a duplicate toast', async () => {
+  const {createPageStore} = await import('../src/browser/store.mjs');
+  for (const storage of [null,'getter-failure',{getItem(){throw new Error('read');}},{getItem:()=>'{corrupt'}]) {
+    const f = savedFixture(storage);
+    createPageStore(f.doc);
+    assert.equal(f.status.textContent,undefined);
+    assert.equal(f.warning.hidden,false);
+    assert.match(f.warning.textContent,/page|temporary|could not be read/);
+  }
+});
+
 test('active row and detail save toggles expose Undo outside the drawer and preserve order', () => {
   const f = savedFixture(null);
   const store = createStore({validIds:new Set(vehicles.map(v=>v.id)),storage:null});

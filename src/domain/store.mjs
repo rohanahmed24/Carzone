@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'carzone.selection.v1';
-const STORAGE_NOTICE = 'Device storage unavailable; changes last for this page.';
-const CORRUPT_NOTICE = 'Saved device data could not be read; starting a temporary selection.';
+export const STORAGE_NOTICE = 'Device storage unavailable; changes last for this page.';
+export const CORRUPT_NOTICE = 'Saved device data could not be read; starting a temporary selection.';
 const INVALID_NOTICE = 'That car is unavailable.';
 const COMPARE_LIMIT_NOTICE = 'Compare up to three cars.';
 
