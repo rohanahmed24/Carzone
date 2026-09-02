@@ -240,7 +240,10 @@
   color: #fff;
 }
 .home-compare-inner {
-  max-width: 720px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+  gap: 64px 80px;
+  align-items: end;
 }
 .home-compare .eyebrow {
   color: #d9dde1;
@@ -249,11 +252,32 @@
 .home-compare h2 {
   max-width: 14ch;
 }
-.home-compare-inner > p:not(.eyebrow) {
+.home-compare-copy > p:not(.eyebrow) {
   font-size: 20px;
   max-width: 42ch;
   margin: 24px 0 36px;
   color: #d9dde1;
+}
+.home-compare-trio ul {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--muted);
+}
+.home-compare-trio a {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  border-bottom: 1px solid var(--muted);
+  text-decoration: none;
+  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.home-compare-trio a:hover {
+  color: #fff;
+  text-decoration: underline;
 }
 .home-studio-grid {
   display: grid;
@@ -433,7 +457,11 @@
     margin-top: 56px;
     padding-block: 56px;
   }
-  .home-compare-inner > p:not(.eyebrow) {
+  .home-compare-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .home-compare-copy > p:not(.eyebrow) {
     font-size: 16px;
     margin: 20px 0 28px;
   }

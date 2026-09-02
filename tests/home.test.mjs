@@ -57,7 +57,7 @@ test('home has real content, local assets and a disabled no-JS finder', () => {
   assert.match(html,/See all twelve/);
   assert.match(html,/Look closer\./);
   assert.match(html,/A short path\. Local only\./);
-  assert.match(html,/Understand the differences\./);
+  assert.match(html,/A useful first trio/);
   assert.match(html,/Try the other routes\./);
   assert.match(html,/href="latest-cars.html"/);
   assert.match(html,/href="popular-cars.html"/);

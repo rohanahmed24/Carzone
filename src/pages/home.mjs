@@ -1,4 +1,5 @@
 import {getVehicle} from '../domain/catalogue.mjs';
+import {vehicleHref} from '../domain/routes.mjs';
 import {vehicleRow, vehicleImageSize} from '../ui/vehicle-row.mjs';
 import {escapeHtml as e} from '../ui/escape.mjs';
 
@@ -25,6 +26,13 @@ const collections = [
     copy: 'Launch timing unconfirmed. Unknown prices stay unknown.',
   },
 ];
+
+function compareTrio() {
+  return ['city-sedan', 'sport-sedan', 'family-suv'].map(id => {
+    const vehicle = getVehicle(id);
+    return `<li><a href="${e(vehicleHref(vehicle))}">${e(vehicle.name)}</a></li>`;
+  }).join('');
+}
 
 function collectionTile({id, href, kicker, title, copy}) {
   const vehicle = getVehicle(id);
@@ -68,10 +76,16 @@ export function renderHome() {
 </section>
 <section class="home-compare" aria-labelledby="home-compare-title">
   <div class="container home-compare-inner">
-    <p class="eyebrow">Side by side</p>
-    <h2 id="home-compare-title">Understand the differences.</h2>
-    <p>Compare up to three illustrative cars. Known facts stay comparable. Missing facts stay missing. A shared link never overwrites the cars on this device.</p>
-    <a class="button" href="compare-car.html">Compare cars</a>
+    <div class="home-compare-copy">
+      <p class="eyebrow">Side by side</p>
+      <h2 id="home-compare-title">Understand the differences.</h2>
+      <p>Compare up to three illustrative cars. Known facts stay comparable. Missing facts stay missing. A shared link never overwrites the cars on this device.</p>
+      <a class="button" href="compare-car.html">Compare cars</a>
+    </div>
+    <div class="home-compare-trio">
+      <p class="eyebrow">A useful first trio</p>
+      <ul>${compareTrio()}</ul>
+    </div>
   </div>
 </section>
 <section class="container home-studio" aria-labelledby="studio-title">
