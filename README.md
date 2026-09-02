@@ -4,6 +4,8 @@ A cinematic automotive portfolio demo with a practical browsing, shortlist and c
 
 [Live portfolio demo](https://carzone-psi.vercel.app) · [Deployment record](docs/qa/vercel-deployment.md)
 
+Production at that URL currently serves `main` at [`5f396e5`](https://github.com/rohanahmed24/Carzone/commit/5f396e5102b2c9717181c3bfce68b8b428017948), including the homepage collections, path, compare band and local previews.
+
 ## Run locally
 
 Use Node **24.x** (tested with 24.19.0). From this directory:

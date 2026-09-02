@@ -16,6 +16,15 @@ Date: 2026-08-31, Asia/Dhaka. The user separately requested Vercel deployment an
 
 This record identifies the first verified application release. Subsequent documentation-only pushes can create a new deployment of the same application through the Git integration; the stable production URL remains the entry point.
 
+## 2026-09-02 production update
+
+Homepage sections (collections, path, compare trio, local previews) plus the earlier compare-tray / storage-warning / Saved Undo fixes were merged to `main` as [`5f396e5`](https://github.com/rohanahmed24/Carzone/commit/5f396e5102b2c9717181c3bfce68b8b428017948). Vercel Git production completed READY.
+
+- Stable URL (unchanged): [carzone-psi.vercel.app](https://carzone-psi.vercel.app)
+- Immutable this-release URL: [carzone-9cfaw00zl-rohanahmed24s-projects.vercel.app](https://carzone-9cfaw00zl-rohanahmed24s-projects.vercel.app)
+- Dashboard: [BmLcb7PAcqQjLUVPsot5rUabHVXc](https://vercel.com/rohanahmed24s-projects/carzone/BmLcb7PAcqQjLUVPsot5rUabHVXc)
+- Live homepage confirmed to include **Look closer.**, **A short path. Local only.**, **A useful first trio**, and **Try the other routes.** Local `npm run check` on merged `main`: **79 tests, 0 failures**.
+
 ## Repository and deployment configuration
 
 Repository: [rohanahmed24/Carzone](https://github.com/rohanahmed24/Carzone). The modernization branch was fast-forwarded into `main` and pushed normally, from baseline `cc63d10` to `a09054c`; no force push or history rewrite. Original Webflow export files remained unchanged.
