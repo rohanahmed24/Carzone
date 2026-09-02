@@ -54,6 +54,19 @@ test('home has real content, local assets and a disabled no-JS finder', () => {
   assert.match(html,/width="1672" height="941"/);
   assert.match(html,/src="\/assets\/brand\/carzone-logo.png"/);
   assert.match(html,/type="module" src="\/assets\/browser\/main.mjs"/);
+  assert.match(html,/See all twelve/);
+  assert.match(html,/Look closer\./);
+  assert.match(html,/A short path\. Local only\./);
+  assert.match(html,/A useful first trio/);
+  assert.match(html,/Try the other routes\./);
+  assert.match(html,/href="latest-cars.html"/);
+  assert.match(html,/href="popular-cars.html"/);
+  assert.match(html,/href="upcoming-cars.html"/);
+  assert.match(html,/href="sell-your-car.html"/);
+  assert.match(html,/href="car-valuation.html"/);
+  assert.match(html,/href="latest-cars.html\?view=all"/);
+  assert.match(html,/Not live stock/);
+  assert.match(html,/No price estimate or dealer offer is generated/);
 });
 test('shared formatting escapes data and preserves missing values', () => {
   assert.equal(escapeHtml('<a "x">&\''),'&lt;a &quot;x&quot;&gt;&amp;&#39;');
